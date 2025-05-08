@@ -23,3 +23,5 @@ gen
 ### Others
 node_modules/
 build/
+5hell/
+.env
