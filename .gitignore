@@ -21,3 +21,5 @@ out
 gen
 
 ### Others
+node_modules/
+build/
