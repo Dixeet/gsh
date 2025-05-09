@@ -1,0 +1,12 @@
+globals.debug = function(x)
+  if globals.params isa list and globals.params.len then
+    for param in globals.params
+      if param == "--debug" then
+        print("DEBUG:".under.color("red"))
+        print((x + "").color("<color=#D39999>", true))
+        print("------".color("red"))
+        break
+      end if
+    end for
+  end if
+end function

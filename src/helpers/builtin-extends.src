@@ -34,7 +34,8 @@ string.toCsv = function
   return self.replace("  *", ",").replace(",\\n", char(10))
 end function
 
-string.color = function(color)
+string.color = function(color, custom = false)
+  if custom then return surroundEachLineWith(self, color, Gsh.helpers.colors.cc)
   return surroundEachLineWith(self, Gsh.helpers.colors[color], Gsh.helpers.colors.cc)
 end function
 

@@ -1,10 +1,11 @@
 import_code("config.src")
 import_code("gcore.src")
 
-print("foo")
-print("toto".color("blue").size(120).offset(-1))
-print(("tata" + "titi").color("yellow"))
+foo = function(params)
+  if not params then params = globals.params
+  print(params)
+end function
 
+toto = string
 
-print("COMMAND:".bold)
-print(("Test de usage \net de description").indent(3).color("red").bold)
+print("tata" isa toto)
