@@ -1,0 +1,7 @@
+settings = function
+  settings = {}
+  settings.foo = "foo"
+  settings.bar = "bar"
+
+  return settings
+end function

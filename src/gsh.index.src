@@ -1,0 +1,6 @@
+Gsh = {}
+
+#include "settings/settings.index.src";
+Gsh.settings = settings
+#include "helpers/helpers.index.src";
+Gsh.helpers = helpers

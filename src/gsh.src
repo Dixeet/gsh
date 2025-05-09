@@ -1,11 +1,7 @@
-import_code("config.src")
-import_code("gcore.src")
+import_code("gsh.index.src")
 
-foo = function(params)
-  if not params then params = globals.params
-  print(params)
-end function
+config = {}
+config.foo = "foobar"
 
-toto = string
-
-print("tata" isa toto)
+Gsh.settings += config
+debug(Gsh.settings, "Gsh.settings")
