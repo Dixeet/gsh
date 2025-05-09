@@ -1,0 +1,4 @@
+Gsh = {}
+
+#include "helpers/helpers.src";
+Gsh.helpers = helpers

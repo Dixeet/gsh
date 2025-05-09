@@ -1,0 +1,18 @@
+colors = function
+  colors = {}
+  colors.green = "<color=#81eb00>"
+  colors.darkgreen = "<color=#007700>"
+  colors.cyan = "<color=#0cddf2>"
+  colors.blue = "<color=#3366ff>"
+  colors.yellow = "<color=#dbd700>"
+  colors.gold = "<color=#CCCC00FF>"
+  colors.black = "<color=#000000FF>"
+  colors.orange = "<color=#FF8400FF>"
+  colors.violet = "<color=#8821FDFF>"
+  colors.magenta = "<color=#b0509e>"
+  colors.red = "<color=#c30000>"
+  colors.white = "<color=#eeeeee>"
+  colors.lightgray = "<color=#b3b3b3>"
+  colors.cc = "</color>"
+  return colors
+end function

@@ -1,0 +1,63 @@
+find = function(where)
+  itemFound = null
+  for item in self.values
+    found = false
+    for attr in where.indexes
+      if item.hasIndex(attr) then
+        found = item[attr] == where[attr]
+      end if
+      if not found then break
+    end for
+    if found then
+      itemFound = item
+      break
+    end if
+  end for
+  return itemFound
+end function
+list.find = @find
+map.find = @find
+
+number.to_int = function
+  return self
+end function
+
+surroundEachLineWith = function(str, s, e)
+  lines = str.split("\\n")
+  for i in lines.indexes
+    lines[i] = s + lines[i] + e
+  end for
+  return lines.join("\n")
+end function
+
+string.toCsv = function
+  return self.replace("  *", ",").replace(",\\n", char(10))
+end function
+
+string.color = function(color)
+  return surroundEachLineWith(self, Gsh.helpers.colors[color], Gsh.helpers.colors.cc)
+end function
+
+string.size = function(size)
+  return surroundEachLineWith(self, "<size=" + size + "%>", "</size>")
+end function
+
+string.indent = function(indent)
+  return surroundEachLineWith(self, "<indent=" + indent + "%>", "</indent>")
+end function
+
+string.offset = function(offset)
+  return surroundEachLineWith(self, "<voffset=" + offset + "em>", "</voffset>")
+end function
+
+string.under = function
+  return surroundEachLineWith(self, "<u>", "</u>")
+end function
+
+string.strike = function
+  return surroundEachLineWith(self, "<s>", "</s>")
+end function
+
+string.bold = function
+  return surroundEachLineWith(self, "<b>", "</b>")
+end function
