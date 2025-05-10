@@ -1,5 +1,5 @@
 globals.debug = function(x, name = "")
-  if globals.params isa list and globals.params.len then
+  if globals.params isa list and globals.params.len and gsh.settings.debug.enabled then
     for param in globals.params
       if param == "--debug" then
         print(("DEBUG:".under + " " + name).color("red"))
