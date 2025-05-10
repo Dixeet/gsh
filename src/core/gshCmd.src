@@ -2,7 +2,7 @@ gshCmd = function
   return function(params)
     trimParams = function(params)
       paramsStr = params.join(" ")
-      return paramsStr.trim.split("  *")
+      if paramsStr.trim then return paramsStr.trim.split("  *") else return []
     end function
 
     handleDebugParam = function(params)

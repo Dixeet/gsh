@@ -1,5 +1,6 @@
 exec = function
   return function(input)
+    if not input then return 
     if gsh.commands.hasIndex(input[0]) then
       if gsh.commands[input[0]] isa gsh.Cli then return gsh.commands[input[0]].exe(input[1 : ])
     end if
