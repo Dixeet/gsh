@@ -3,6 +3,8 @@ core = function
 
   #include "gshCmd.src";
   core.gshCmd = gshCmd
+  #include "exec.src";
+  core.exec = exec
 
   return core
 end function

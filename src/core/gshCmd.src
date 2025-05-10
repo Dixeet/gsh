@@ -12,6 +12,7 @@ gshCmd = function
     cli = new gsh.Cli
     cli.init("GSH CLI", "gsh")
     cli.parseParams(params)
-    print(cli.params)
+
+    gsh.core.exec(params)
   end function
 end function
