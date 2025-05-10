@@ -1,67 +1,70 @@
-find = function(where, returnIndex = false)
-  itemFound = null
-  indexFound = null
-  for i in self.indexes
-    found = false
-    for attr in where.indexes
-      if self[i].hasIndex(attr) then
-        found = self[i][attr] == where[attr]
+builtinExtends = function
+  find = function(where, returnIndex = false)
+    itemFound = null
+    indexFound = null
+    for i in self.indexes
+      found = false
+      for attr in where.indexes
+        if self[i].hasIndex(attr) then
+          found = self[i][attr] == where[attr]
+        end if
+        if not found then break
+      end for
+      if found then
+        itemFound = self[i]
+        indexFound = i
+        break
       end if
-      if not found then break
     end for
-    if found then
-      itemFound = self[i]
-      indexFound = i
-      break
-    end if
-  end for
-  if returnIndex then return indexFound else return itemFound
-end function
-list.find = @find
-map.find = @find
+    if returnIndex then return indexFound else return itemFound
+  end function
+  list.find = @find
+  map.find = @find
 
-number.to_int = function
-  return self
-end function
+  number.to_int = function
+    return self
+  end function
 
-surroundEachLineWith = function(str, s, e)
-  str = str.replace(char(13), "")
-  lines = str.split(char(10))
-  for i in lines.indexes
-    if lines[i] and lines[i] != char(10) and lines[i] != "" then lines[i] = s + lines[i] + e
-  end for
-  return lines.join(char(10))
-end function
+  surroundEachLineWith = function(str, s, e)
+    str = str.replace(char(13), "")
+    lines = str.split(char(10))
+    for i in lines.indexes
+      if lines[i] and lines[i] != char(10) and lines[i] != "" then lines[i] = s + lines[i] + e
+    end for
+    return lines.join(char(10))
+  end function
 
-string.toCsv = function
-  return self.replace("  *", ",").replace(",\n", char(10))
-end function
+  string.toCsv = function
+    return self.replace("  *", ",").replace(",\n", char(10))
+  end function
 
-string.color = function(color)
-  if not gsh.helpers.colors.hasIndex(color) then return surroundEachLineWith(self, color, gsh.helpers.colors.cc)
-  return surroundEachLineWith(self, gsh.helpers.colors[color], gsh.helpers.colors.cc)
-end function
+  string.color = function(color)
+    if not gsh.helpers.colors.hasIndex(color) then return surroundEachLineWith(self, color, gsh.helpers.colors.cc)
+    return surroundEachLineWith(self, gsh.helpers.colors[color], gsh.helpers.colors.cc)
+  end function
 
-string.size = function(size)
-  return surroundEachLineWith(self, "<size=" + size + "%>", "</size>")
-end function
+  string.size = function(size)
+    return surroundEachLineWith(self, "<size=" + size + "%>", "</size>")
+  end function
 
-string.indent = function(indent)
-  return surroundEachLineWith(self, "<indent=" + indent + "%>", "</indent>")
-end function
+  string.indent = function(indent)
+    return surroundEachLineWith(self, "<indent=" + indent + "%>", "</indent>")
+  end function
 
-string.offset = function(offset)
-  return surroundEachLineWith(self, "<voffset=" + offset + "em>", "</voffset>")
-end function
+  string.offset = function(offset)
+    return surroundEachLineWith(self, "<voffset=" + offset + "em>", "</voffset>")
+  end function
 
-string.under = function
-  return surroundEachLineWith(self, "<u>", "</u>")
-end function
+  string.under = function
+    return surroundEachLineWith(self, "<u>", "</u>")
+  end function
 
-string.strike = function
-  return surroundEachLineWith(self, "<s>", "</s>")
-end function
+  string.strike = function
+    return surroundEachLineWith(self, "<s>", "</s>")
+  end function
 
-string.bold = function
-  return surroundEachLineWith(self, "<b>", "</b>")
+  string.bold = function
+    return surroundEachLineWith(self, "<b>", "</b>")
+  end function
 end function
+builtinExtends
