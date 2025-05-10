@@ -1,5 +1,6 @@
 commands = function
   commands = {}
-
+  #include "example.src";
+  commands.example = example
   return commands
 end function
