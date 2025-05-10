@@ -1,19 +1,21 @@
-find = function(where)
+find = function(where, returnIndex = false)
   itemFound = null
-  for item in self.values
+  indexFound = null
+  for i in self.indexes
     found = false
     for attr in where.indexes
-      if item.hasIndex(attr) then
-        found = item[attr] == where[attr]
+      if self[i].hasIndex(attr) then
+        found = self[i][attr] == where[attr]
       end if
       if not found then break
     end for
     if found then
-      itemFound = item
+      itemFound = self[i]
+      indexFound = i
       break
     end if
   end for
-  return itemFound
+  if returnIndex then return indexFound else return itemFound
 end function
 list.find = @find
 map.find = @find
@@ -23,15 +25,16 @@ number.to_int = function
 end function
 
 surroundEachLineWith = function(str, s, e)
-  lines = str.split("\\n")
+  str = str.replace(char(13), "")
+  lines = str.split(char(10))
   for i in lines.indexes
-    lines[i] = s + lines[i] + e
+    if lines[i] and lines[i] != char(10) and lines[i] != "" then lines[i] = s + lines[i] + e
   end for
-  return lines.join("\n")
+  return lines.join(char(10))
 end function
 
 string.toCsv = function
-  return self.replace("  *", ",").replace(",\\n", char(10))
+  return self.replace("  *", ",").replace(",\n", char(10))
 end function
 
 string.color = function(color)

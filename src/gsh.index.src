@@ -4,3 +4,5 @@ Gsh = {}
 Gsh.settings = settings
 #include "helpers/helpers.index.src";
 Gsh.helpers = helpers
+#include "cli/cli.index.src";
+Gsh.Cli = Cli

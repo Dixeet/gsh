@@ -1,0 +1,265 @@
+CliOption = {
+  "name": "",
+  "alias": "",
+  "description": "",
+  "multiple": false,
+  "arg": null,
+  "defaultArgValue": null,
+}
+Cli = {}
+Cli.CliOption = CliOption
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+Cli.formatter = {}
+Cli.formatter.arg = function(str, isOptionnal = false, hasMultiple = false)
+  result = "<" + str + ">"
+  if isOptionnal then result = "[" + result + "]"
+  if hasMultiple then result += "..."
+  return result
+end function
+Cli.formatter.opt = function(str, isOptionnal = false, hasMultiple = false, argStr = null)
+  result = str
+  if argStr then result = result + "=" + argStr
+  if isOptionnal then result = "[" + result + "]"
+  if hasMultiple then result += "..."
+  return result
+end function
+Cli.formatter.exclusive = function(strArr, isOptionnal = false)
+  result = strArr.join(" | ")
+  if isOptionnal then result = "[" + result + "]" else result = "(" + result + ")"
+  return result
+end function
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+Cli.help = function
+  str = ""
+  if self.name then str = str + self.name.under + char(10) + char(10)
+  if self.definition.usages and self.definition.usages.len then
+    str = str + "Usage:".bold + char(10)
+    usagesStr = ""
+    for usage in self.definition.usages
+      if usage isa list then usagesStr += usage.join(" ") else usagesStr += usage
+      usagesStr += char(10)
+    end for
+    str += usagesStr.indent(2)
+  end if
+
+  if self.definition.options and self.definition.options.len then
+    str = str + char(10) + "Options:".bold + char(10)
+    optionsStr = ""
+    for option in self.definition.options.values
+      optStr = ""
+      if option.alias then optStr += option.alias + ",¨"
+      optStr += option.name
+      if option.arg then optStr += "=<" + option.arg + ">"
+      optStr += " "
+      if option.defaultArgValue then option.description = option.description + " [default: " + option.defaultArgValue + "]"
+      if option.description then optStr += option.description.replace(" ", "¨") else optStr += "¨"
+      optionsStr = optionsStr + optStr + char(10)
+    end for
+    optionsStr = format_columns(optionsStr).replace("¨", " ")
+    str += optionsStr.indent(2)
+  end if
+
+  if self.definition.sections and self.definition.sections.len then
+    for section in self.definition.sections
+      str += char(10)
+      if section isa list then str += section.join(char(10)) else str += section
+    end for
+  end if
+  return str
+end function
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+Cli.parseParams = function(params = [])
+  self.params = params
+  self.args = []
+  self.options = {}
+  this = self
+
+  this.nextIsOptArg = false
+  handleOption = function(option)
+    this = this
+    optionSplit = option.split("=")
+    hasArg = function(indexFound)
+      if optionSplit.len > 1 then
+        if this.options[indexFound] isa list then
+          this.options[indexFound].push(optionSplit[1])
+        else
+          this.options[indexFound] = optionSplit[1]
+        end if
+        this.nextIsOptArg = false
+      else
+        this.nextIsOptArg = indexFound
+      end if
+    end function
+
+    indexFound = this.definition.options.find({ "name": optionSplit[0] }, true)
+    if indexFound == null then indexFound = this.definition.options.find({ "alias": optionSplit[0] }, true)
+    if indexFound == null then
+      this.nextIsOptArg = false
+      return null
+    else
+      optionFound = this.definition.options[indexFound]
+      if optionFound.arg then
+        hasArg(indexFound)
+      else
+        this.nextIsOptArg = false
+        if this.options[indexFound] isa list then
+          this.options[indexFound].push(true)
+        else
+          this.options[indexFound] = true
+        end if
+      end if
+      return true
+    end if
+  end function
+
+  addTo = function(arg)
+    if this.nextIsOptArg then
+      if this.options[this.nextIsOptArg] isa list then this.options[this.nextIsOptArg].push(arg) else this.options[this.nextIsOptArg] = arg
+    else
+      this.args.push(arg)
+    end if
+    this.nextIsOptArg = false
+  end function
+
+  for opt in this.definition.options
+    this.options[opt.key] = null
+    if opt.value.multiple then this.options[opt.key] = []
+    if opt.value.defaultArgValue then this.options[opt.key] = opt.value.defaultArgValue
+  end for
+
+  for param in params
+    if param[0] == "-" then
+      isHandle = handleOption(param)
+      if not isHandle then addTo(param)
+    else
+      addTo(param)
+    end if
+  end for
+end function
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+Cli.init = function(name = "", cmd = "")
+  self.name = name
+  self.cmd = cmd
+  self.definition = {}
+  self.definition.options = {}
+  self.definition.usages = []
+  self.definition.sections = []
+  self.exe = function(params)
+    print("Empty Command")
+  end function
+end function
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+// // Example
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+
+// cli = new Cli
+// cli.init("Naval Fate", "naval_fate")
+
+// opts = {}
+// opts.help = new CliOption
+// opts.help.name = "--help"
+// opts.help.alias = "-h"
+// opts.help.description = "Show this screen"
+
+// opts.version = new CliOption
+// opts.version.name = "--version"
+// opts.version.description = "Show version"
+
+// opts.speed = new CliOption
+// opts.speed.name = "--speed"
+// opts.speed.arg = "kn"
+// opts.speed.defaultArgValue = 10
+// opts.speed.description = "Speed in knots"
+
+// opts.sailors = new CliOption
+// opts.sailors.name = "--sailors"
+// opts.sailors.arg = "name"
+// opts.sailors.multiple = true
+// opts.sailors.description = "List of sailors"
+
+// opts.moored = new CliOption
+// opts.moored.name = "--moored"
+// opts.moored.description = "Moored (anchored) mine"
+
+// opts.drifting = new CliOption
+// opts.drifting.name = "--drifting"
+// opts.drifting.alias = "-d"
+// opts.drifting.description = "Drifting mine"
+
+// cli.definition.sections = [
+// [ "\nDescription" ],
+// [ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur lorem neque, interdum eu odio et, imperdiet ullamcorper enim. Ut ullamcorper volutpat ex sodales porttitor. Maecenas sed risus nibh. Maecenas a fringilla sapien. Vivamus et arcu lobortis" ],
+// ]
+
+// cli.definition.options = opts
+
+// f = cli.formatter
+
+// cli.definition.usages = [
+// [
+// cli.cmd,
+// "ship",
+// "new",
+// f.arg("name", false, true),
+// ],
+// [
+// cli.cmd,
+// f.arg("name"),
+// "move",
+// f.arg("x"),
+// f.arg("y"),
+// f.opt(
+// opts.speed.name,
+// true,
+// false,
+// f.arg(opts.speed.arg)),
+// ],
+// [
+// cli.cmd,
+// "ship",
+// "shoot",
+// f.arg("x"),
+// f.arg("y"),
+// ],
+// [
+// cli.cmd,
+// "mine",
+// f.exclusive([
+// "set",
+// "remove",
+// ]),
+// f.arg("x"),
+// f.arg("y"),
+// f.exclusive([
+// opts.moored.name,
+// opts.drifting.name,
+// ], true),
+// ],
+// [
+// cli.cmd,
+// "ship",
+// f.opt(
+// opts.sailors.name,
+// true,
+// true,
+// f.arg(opts.sailors.arg, false)),
+// ],
+// "naval_fate --version",
+// ]
+
+// print(cli.help)
+
+// // testParams = "ship new shp1 shop2 ship3"
+// // testParams = "ship myship move 4 8 --speed=13"
+// // testParams = "ship myship move --speed 13 4 8 "
+// // testParams = "ship new myship --sailors=tom --sailors olive move --sailors aria --sailors=lilo "
+// testParams = "mine remove 2 7 --moored"
+// ps = testParams.trim.split("  *")
+
+// cli.parseParams(ps)
+
+// print(cli.args)
+// print(cli.options)
+
