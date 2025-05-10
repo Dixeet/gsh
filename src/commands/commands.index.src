@@ -1,0 +1,5 @@
+commands = function
+  commands = {}
+
+  return commands
+end function

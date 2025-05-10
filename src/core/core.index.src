@@ -1,0 +1,8 @@
+core = function
+  core = {}
+
+  #include "execute.src";
+  core.execute = execute
+
+  return core
+end function

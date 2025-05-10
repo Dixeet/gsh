@@ -1,8 +1,12 @@
-Gsh = {}
+gsh = {}
 
 #include "settings/settings.index.src";
-Gsh.settings = settings
+gsh.settings = settings
 #include "helpers/helpers.index.src";
-Gsh.helpers = helpers
+gsh.helpers = helpers
 #include "cli/cli.index.src";
-Gsh.Cli = Cli
+gsh.Cli = Cli
+#include "commands/commands.index.src";
+gsh.commands = commands
+#include "core/core.index.src";
+gsh.core = core

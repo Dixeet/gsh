@@ -3,5 +3,7 @@ import_code("gsh.index.src")
 config = {}
 config.foo = "foobar"
 
-Gsh.settings += config
-debug(Gsh.settings, "Gsh.settings")
+gsh.settings += config
+debug(gsh.settings, "gshsettings")
+
+gsh.core.execute
