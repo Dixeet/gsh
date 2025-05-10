@@ -1,0 +1,17 @@
+gshCmd = function
+  return function(params)
+    handleDebugParam = function(params)
+      if gsh.settings.debug.passthrough then return params
+      indexOfDebug = params.indexOf("--debug")
+      if indexOfDebug != null then params = params[ : indexOfDebug] + params[indexOfDebug + 1 : ]
+      return params
+    end function
+
+    if not params then params = globals.params
+    params = handleDebugParam(params)
+    cli = new gsh.Cli
+    cli.init("GSH CLI", "gsh")
+    cli.parseParams(params)
+    print(cli.params)
+  end function
+end function

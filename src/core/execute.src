@@ -1,5 +1,0 @@
-execute = function
-  return function(params)
-    print(params)
-  end function
-end function

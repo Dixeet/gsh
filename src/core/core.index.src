@@ -1,8 +1,8 @@
 core = function
   core = {}
 
-  #include "execute.src";
-  core.execute = execute
+  #include "gshCmd.src";
+  core.gshCmd = gshCmd
 
   return core
 end function

@@ -1,9 +1,11 @@
 import_code("gsh.index.src")
 
-config = {}
-config.foo = "foobar"
+config = { "debug": {
+  "enabled": true,
+  "passthrough": false,
+} }
 
 gsh.settings += config
-debug(gsh.settings, "gshsettings")
+debug(gsh.settings, "gsh.settings")
 
-gsh.core.execute
+gsh.core.gshCmd(params)

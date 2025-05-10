@@ -1,7 +1,8 @@
 settings = function
-  settings = {}
-  settings.foo = "foo"
-  settings.bar = "bar"
+  settings = { "debug": {
+    "enabled": true,
+    "passthrough": false,
+  } }
 
   return settings
 end function
