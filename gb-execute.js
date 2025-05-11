@@ -8,6 +8,13 @@ if (process.env.ARGS) {
   });
 }
 
+const params = [];
+if (process.env.PARAMS) {
+  process.env.PARAMS.split(' ').forEach(p => {
+    params.push(p);
+  });
+}
+
 child.fork(process.env.APPDATA + '\\npm\\node_modules\\greybel-js\\bin\\index.js', [
-  'execute', process.argv.slice(2).join(' ').trim(), ...args
+  'execute',...params, process.argv.slice(2).join(' ').trim(), ...args
 ]);
