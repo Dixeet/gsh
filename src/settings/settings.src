@@ -1,7 +1,7 @@
 settings = function
   settings = { "debug": {
-    "enabled": true,
-    "passthrough": false,
+    "enabled": false,
+    "passthrough": true,
   } }
 
   return settings
