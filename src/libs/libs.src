@@ -1,5 +1,7 @@
-#include "debug";
+#include "debug.src";
 #include "builtin-extends.src";
+#include "json.src";
 #include "helpers/helpers.src";
 
 builtinExtends
+Json = Json
