@@ -1,3 +1,4 @@
+#include "context.src";
 #include "_gsh.src";
 #include "exec.src";
 #include "prompt-state.src";

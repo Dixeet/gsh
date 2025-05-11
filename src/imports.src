@@ -6,6 +6,7 @@
 gsh = {}
 gsh.settings = settings
 gsh.helpers = helpers
+gsh.ctx = ctx
 gsh.Cli = Cli
 gsh.commands = commands
 gsh.core = core
