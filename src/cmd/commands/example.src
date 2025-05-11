@@ -11,7 +11,7 @@ example = function
   cli = new gsh.Cli
   cli.init("Example Cli", "example")
 
-  cli.exe = function(params)
+  cli.exec = function(params)
     self.parseParams(params)
     if self.options.help then
       print(self.help)

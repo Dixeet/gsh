@@ -1,8 +1,23 @@
 exec = function
   return function(input)
-    if not input then return 
-    if gsh.commands.hasIndex(input[0]) then
-      if gsh.commands[input[0]] isa gsh.Cli then return gsh.commands[input[0]].exe(input[1 : ])
+    execCmd = function(cmd, args)
+      res = null
+      if typeof(@cmd) == "function" then
+        res = cmd(args)
+      else if cmd isa gsh.Cli then
+        res = cmd.exec(args)
+      end if
+      return res
+    end function
+
+    if not input isa list or not input then
+      return 
+    else
+      cmd = input[0]
+      args = input[1 : ]
+      if gsh.commands.hasIndex(cmd) then
+        execCmd(gsh.commands[cmd], args)
+      end if
     end if
   end function
 end function

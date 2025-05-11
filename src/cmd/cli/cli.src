@@ -18,7 +18,7 @@ Cli = function
     self.definition.options = {}
     self.definition.usages = []
     self.definition.sections = []
-    self.exe = function(params)
+    self.exec = function(params)
       print("Empty Command")
     end function
   end function
