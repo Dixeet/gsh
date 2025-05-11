@@ -45,20 +45,20 @@ Cli = function
   end function
   // /////////////////////////////////////////////////////////////////////////////////////////////////
   Cli.help = function
-    str = ""
-    if self.name then str = str + self.name.under + char(10) + char(10)
+    helpStr = ""
+    if self.name then helpStr = helpStr + self.name.under + char(10) + char(10)
     if self.definition.usages and self.definition.usages.len then
-      str = str + "Usage:".bold + char(10)
+      helpStr = helpStr + "Usage:".bold + char(10)
       usagesStr = ""
       for usage in self.definition.usages
         if usage isa list then usagesStr += usage.join(" ") else usagesStr += usage
         usagesStr += char(10)
       end for
-      str += usagesStr.indent(2)
+      helpStr += usagesStr.indent(2)
     end if
 
     if self.definition.options and self.definition.options.len then
-      str = str + char(10) + "Options:".bold + char(10)
+      helpStr = helpStr + char(10) + "Options:".bold + char(10)
       optionsStr = ""
       for option in self.definition.options.values
         optStr = ""
@@ -71,16 +71,16 @@ Cli = function
         optionsStr = optionsStr + optStr + char(10)
       end for
       optionsStr = format_columns(optionsStr).replace("¨", " ")
-      str += optionsStr.indent(2)
+      helpStr += optionsStr.indent(2)
     end if
 
     if self.definition.sections and self.definition.sections.len then
       for section in self.definition.sections
-        str += char(10)
-        if section isa list then str += section.join(char(10)) else str += section
+        helpStr += char(10)
+        if section isa list then helpStr += section.join(char(10)) else helpStr += section
       end for
     end if
-    return str
+    return helpStr
   end function
   // /////////////////////////////////////////////////////////////////////////////////////////////////
   Cli.parseParams = function(params = [])

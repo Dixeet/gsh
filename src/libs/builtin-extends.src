@@ -25,9 +25,9 @@ builtinExtends = function
     return self
   end function
 
-  surroundEachLineWith = function(str, s, e)
-    str = str.replace(char(13), "")
-    lines = str.split(char(10))
+  surroundEachLineWith = function(inputStr, s, e)
+    inputStr = inputStr.replace(char(13), "")
+    lines = inputStr.split(char(10))
     for i in lines.indexes
       if lines[i] and lines[i] != char(10) and lines[i] != "" then lines[i] = s + lines[i] + e
     end for
