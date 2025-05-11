@@ -18,9 +18,9 @@ example = function
       return 
     end if
 
-    print(self.params)
-    print(self.options)
-    print(self.args)
+    print("og params: " + self.params)
+    print("cli options: " + self.options)
+    print("cli args: " + self.args)
   end function
 
   opts = {}
