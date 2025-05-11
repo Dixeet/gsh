@@ -1,4 +1,4 @@
-gshCmd = function
+_gsh = function
   return function(params)
     trimParams = function(params)
       paramsStr = params.join(" ")

@@ -67,4 +67,3 @@ builtinExtends = function
     return surroundEachLineWith(self, "<b>", "</b>")
   end function
 end function
-builtinExtends

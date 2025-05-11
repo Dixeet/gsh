@@ -1,4 +1,4 @@
-import_code("gsh.index.src")
+import_code("imports.src")
 
 config = { "debug": {
   "enabled": true,
@@ -13,8 +13,7 @@ debug(gsh.settings, "gsh.settings")
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // cmd = "example"
 // args = "ship myship move 4 8 --speed=13"
-
 // params = (cmd + " " + args).split(" ")
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-gsh.core.gshCmd(params)
+gsh.core._gsh(params)

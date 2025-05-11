@@ -1,0 +1,11 @@
+#include "settings/settings.src";
+#include "libs/libs.src";
+#include "cmd/cmd.src";
+#include "core/core.src";
+
+gsh = {}
+gsh.settings = settings
+gsh.helpers = helpers
+gsh.Cli = Cli
+gsh.commands = commands
+gsh.core = core

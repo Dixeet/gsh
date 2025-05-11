@@ -1,9 +1,7 @@
+#include "colors.src";
 helpers = function
   helpers = {}
 
-  #include "debug";
-  #include "builtin-extends.src";
-  #include "colors.src";
   helpers.colors = colors
 
   return helpers

@@ -1,0 +1,10 @@
+#include "_gsh.src";
+#include "exec.src";
+core = function
+  core = {}
+
+  core._gsh = _gsh
+  core.exec = exec
+
+  return core
+end function
