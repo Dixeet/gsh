@@ -1,5 +1,5 @@
 exec = function
-  return function(input)
+  return function(input, fromPrompt = false)
     execCmd = function(cmd, args)
       res = null
       if typeof(@cmd) == "function" then
@@ -11,12 +11,14 @@ exec = function
     end function
 
     if not input isa list or not input then
-      return 
+      if not fromPrompt then gsh.core.promptState.prompt
     else
       cmd = input[0]
       args = input[1 : ]
       if gsh.commands.hasIndex(cmd) then
         execCmd(gsh.commands[cmd], args)
+      else
+        get_shell.launch(cmd, args.join(" "))
       end if
     end if
   end function

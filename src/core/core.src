@@ -1,10 +1,12 @@
 #include "_gsh.src";
 #include "exec.src";
+#include "prompt-state.src";
 core = function
   core = {}
 
   core._gsh = _gsh
   core.exec = exec
+  core.promptState = promptState
 
   return core
 end function
