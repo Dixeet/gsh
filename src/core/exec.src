@@ -1,5 +1,8 @@
 exec = function
   return function(input)
+    // ////////////////////////////////////////////////
+    // functions                                     //
+    // ////////////////////////////////////////////////
     execCmd = function(cmd, args)
       res = null
       if typeof(@cmd) == "function" then
@@ -10,6 +13,24 @@ exec = function
       return res
     end function
 
+    execLocally = function(cmd, args)
+      exePaths = gsh.helpers.exePossiblePaths(cmd)
+      launched = false
+      for path in exePaths
+        exe = get_shell.host_computer.File(path)
+        if exe then
+          launched = true
+          get_shell.launch(path, args.join(" "))
+          break
+        end if
+      end for
+      if not launched then get_shell.launch(cmd, args.join(" "))
+    end function
+
+
+    // ////////////////////////////////////////////////
+    // main                                          //
+    // ////////////////////////////////////////////////
     if not input isa list or not input then
       gsh.core.promptMode.prompt
     else
@@ -18,7 +39,7 @@ exec = function
       if gsh.commands.hasIndex(cmd) then
         execCmd(gsh.commands[cmd], args)
       else
-        get_shell.launch(cmd, args.join(" "))
+        execLocally(cmd, args)
       end if
     end if
   end function

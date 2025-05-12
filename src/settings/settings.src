@@ -8,6 +8,7 @@ settings = function
       "confirm": true,
       "defaultAnswer": "y",
     },
+    "PATH": "/root/dev/bin:/root/bin:/bin"
   }
 
   return settings

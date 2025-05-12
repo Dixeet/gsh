@@ -1,6 +1,6 @@
 #include "colors.src";
 #include "ask.src";
-#include "path.src"
+#include "path.src";
 
 helpers = function
   helpers = {}
@@ -8,6 +8,24 @@ helpers = function
   helpers.colors = colors
   helpers.ask = ask
   helpers.path = path
+  helpers.exePossiblePaths = function(file)
+    paths = []
+    if file isa string then
+      paths.push(helpers.path.resolve([
+        current_path,
+        file,
+      ]))
+      if gsh and gsh.t("settings") and gsh.settings.t("PATH") then
+        for path in gsh.settings.PATH.split(":")
+          paths.push(helpers.path.resolve([
+            path,
+            file,
+          ]))
+        end for
+      end if
+    end if
+    return paths
+  end function
 
   return helpers
 end function
