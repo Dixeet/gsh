@@ -8,7 +8,7 @@ colors = function
   colors.gold = "<color=#CCCC00FF>"
   colors.black = "<color=#000000FF>"
   colors.orange = "<color=#FF8400FF>"
-  colors.violet = "<color=#8821FDFF>"
+  colors.purple = "<color=#8821FDFF>"
   colors.magenta = "<color=#b0509e>"
   colors.red = "<color=#c30000>"
   colors.white = "<color=#eeeeee>"
