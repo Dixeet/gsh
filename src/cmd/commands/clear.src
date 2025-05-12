@@ -1,0 +1,28 @@
+clear = function
+  cli = new gsh.Cli
+  cli.init("Clear", "clear")
+
+  cli.exec = function(params)
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+    clear_screen
+  end function
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [ "clear" ]
+  cli.definition.sections = [
+    "",
+    "Clear the screen of any text",
+  ]
+
+  return cli
+end function
