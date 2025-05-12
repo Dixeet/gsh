@@ -1,0 +1,12 @@
+test = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin imperdiet arcu quis rhoncus rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus fringilla rhoncus sem, id sodales elit luctus sed. Donec vitae dictum eros, volutpat sagittis eros. In hac habitasse platea dictumst."
+
+#include "../src/imports.src";
+
+for color in helpers.colors.indexes
+  if color != "cc" and helpers.colors[color] then
+    print(("color: " + color).color(color) + char(10))
+    print(test.color(color) + char(10) + char(10) + "-----------------------")
+  end if
+end for
+
+print("""" + helpers.colors.red.replace("<color=", "").replace(">", "") + """")
