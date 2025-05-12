@@ -1,9 +1,12 @@
 import_code("imports.src")
 
-config = { "debug": {
-  "enabled": true,
-  "passthrough": false,
-} }
+config = {
+  "debug": {
+    "enabled": true,
+    "passthrough": false,
+  },
+  "onExit": { "confirm": false },
+}
 
 gsh.settings += config
 debug(gsh.settings, "gsh.settings")

@@ -46,7 +46,7 @@ Cli = function
   // /////////////////////////////////////////////////////////////////////////////////////////////////
   Cli.help = function
     helpStr = ""
-    if self.name then helpStr = helpStr + self.name.under + char(10) + char(10)
+    if self.name then helpStr = helpStr + self.name.color("primary").bold.under + char(10) + char(10)
     if self.definition.usages and self.definition.usages.len then
       helpStr = helpStr + "Usage:".bold + char(10)
       usagesStr = ""

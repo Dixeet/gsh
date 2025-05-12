@@ -18,8 +18,14 @@ builtinExtends = function
     end for
     if returnIndex then return indexFound else return itemFound
   end function
+
+  isTrue = function(index)
+    return self.hasIndex(index) and self[index]
+  end function
   list.find = @find
   map.find = @find
+  list.t = @isTrue
+  map.t = @isTrue
 
   number.to_int = function
     return self

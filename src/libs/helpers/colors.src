@@ -1,18 +1,48 @@
 colors = function
-  colors = {}
-  colors.green = "<color=#81eb00>"
-  colors.darkgreen = "<color=#007700>"
-  colors.cyan = "<color=#0cddf2>"
-  colors.blue = "<color=#3366ff>"
-  colors.yellow = "<color=#dbd700>"
-  colors.gold = "<color=#CCCC00FF>"
-  colors.black = "<color=#000000FF>"
-  colors.orange = "<color=#FF8400FF>"
-  colors.purple = "<color=#8821FDFF>"
-  colors.magenta = "<color=#b0509e>"
-  colors.red = "<color=#c30000>"
-  colors.white = "<color=#eeeeee>"
-  colors.lightgray = "<color=#b3b3b3>"
+  colors = {
+    "black": "<color=#000000>",
+    "white": "<color=#ffffff>",
+    "red": "<color=#f44336>",
+    "redLight": "<color=#e57373>",
+    "pink": "<color=#e91e63>",
+    "pinkLight": "<color=#f06292>",
+    "purple": "<color=#9c27b0>",
+    "purpleLight": "<color=#ba68c8>",
+    "indigo": "<color=#3f51b5>",
+    "indigoLight": "<color=#7986cb>",
+    "blue": "<color=#2196f3>",
+    "blueLight": "<color=#64b5f6>",
+    "cyan": "<color=#00bcd4>",
+    "cyanLight": "<color=#4dd0e1>",
+    "teal": "<color=#009688>",
+    "tealLight": "<color=#4db6ac>",
+    "green": "<color=#22c55e>",
+    "greenLight": "<color=#86efac>",
+    "lime": "<color=#84cc16>",
+    "limeLight": "<color=#bef264>",
+    "yellow": "<color=#ffeb3b>",
+    "yellowLight": "<color=#fff176>",
+    "amber": "<color=#ffc107>",
+    "amberLight": "<color=#ffd54f>",
+    "orange": "<color=#ff9800>",
+    "orangeLight": "<color=#ffb74d>",
+    "brown": "<color=#795548>",
+    "brownLight": "<color=#a1887f>",
+    "grey": "<color=#9e9e9e>",
+    "greyLight": "<color=#e0e0e0>"
+  }
   colors.cc = "</color>"
+
+  colors.primary = colors.cyanLight
+  colors.secondary = colors.tealLight
+  colors.tertiary = colors.purpleLight
+  colors.accent = colors.orange
+  colors.info = colors.indigoLight
+  colors.success = colors.green
+  colors.warn = colors.amber
+  colors.error = colors.red
+  if gsh and gsh.t("settings") and gsh.settings.t("colors") then
+    colors = colors + gsh.settings.colors
+  end if
   return colors
 end function
