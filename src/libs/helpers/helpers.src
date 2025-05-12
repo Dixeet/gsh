@@ -1,10 +1,13 @@
 #include "colors.src";
 #include "ask.src";
+#include "path.src"
+
 helpers = function
   helpers = {}
 
   helpers.colors = colors
   helpers.ask = ask
+  helpers.path = path
 
   return helpers
 end function

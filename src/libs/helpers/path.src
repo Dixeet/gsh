@@ -1,0 +1,56 @@
+path = function
+  path = {}
+
+  path.basename = function(path)
+    if path then return self.sanitize(path).split("/")[-1]
+  end function
+
+  path.parentPath = function(path)
+    if path isa string and path then return parent_path(path)
+  end function
+
+  path.sanitize = function(path)
+    if path isa string then
+      path = path.trim
+      if path.len > 1 and path[-1] == "/" then path = path[ : -1]
+      if path and path[0] == "." and path[1] == "/" then path = path[2 : ]
+      if path then return path.replace("//*", "/")
+    end if
+  end function
+
+  path.normalize = function(path)
+    path = self.sanitize(path)
+    if path isa string and path and path[0] != "/" then path = current_path + "/" + path
+    path = self.sanitize(path)
+    relativeSplit = path.split("\.\.")
+    if relativeSplit and relativeSplit.len > 1 then
+      current = relativeSplit[0]
+      for i in relativeSplit.indexes
+        if i then
+          current = self.parentPath(current) + relativeSplit[i]
+        end if
+      end for
+      path = current
+    end if
+    return self.sanitize(path)
+  end function
+
+  path.resolve = function(paths)
+    if paths isa list and paths.len > 1 then
+      current = paths[0]
+      for i in paths.indexes
+        if i then
+          currentPath = self.sanitize(paths[i])
+          if currentPath and currentPath[0] == "/" then
+            current = currentPath
+          else
+            current = current + "/" + currentPath
+          end if
+        end if
+      end for
+      return self.normalize(current)
+    end if
+  end function
+
+  return path
+end function
