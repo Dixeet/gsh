@@ -17,6 +17,7 @@ gen
 
 ### Others
 node_modules/
+.node-persist
 build/
 5hell/
 .env

@@ -1,8 +1,14 @@
 settings = function
-  settings = { "debug": {
-    "enabled": false,
-    "passthrough": true,
-  } }
+  settings = {
+    "debug": {
+      "enabled": false,
+      "passthrough": true,
+    },
+    "onExit": {
+      "confirm": true,
+      "defaultAnswer": "y",
+    },
+  }
 
   return settings
 end function

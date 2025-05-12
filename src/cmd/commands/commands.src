@@ -1,6 +1,8 @@
+#include "example.src";
+#include "exit.src";
 commands = function
   commands = {}
-  #include "example.src";
   commands.example = example
+  commands.exit = exitCmd
   return commands
 end function

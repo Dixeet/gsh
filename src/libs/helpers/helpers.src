@@ -1,8 +1,10 @@
 #include "colors.src";
+#include "ask.src";
 helpers = function
   helpers = {}
 
   helpers.colors = colors
+  helpers.ask = ask
 
   return helpers
 end function

@@ -1,5 +1,5 @@
 exec = function
-  return function(input, fromPrompt = false)
+  return function(input)
     execCmd = function(cmd, args)
       res = null
       if typeof(@cmd) == "function" then
@@ -11,7 +11,7 @@ exec = function
     end function
 
     if not input isa list or not input then
-      if not fromPrompt then gsh.core.promptState.prompt
+      gsh.core.promptMode.prompt
     else
       cmd = input[0]
       args = input[1 : ]
