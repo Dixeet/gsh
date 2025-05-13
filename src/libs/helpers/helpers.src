@@ -8,10 +8,11 @@ helpers = function
   helpers.colors = colors
   helpers.ask = ask
   helpers.path = path
+
   helpers.exePossiblePaths = function(file)
     paths = []
     if file isa string then
-    if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
+      if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
       paths.push(helpers.path.resolve([
         currentPath,
         file,
@@ -26,6 +27,24 @@ helpers = function
       end if
     end if
     return paths
+  end function
+
+  helpers.getFileString = function(file, detail = false)
+    fileString = file.name.trim
+    if detail then
+      fileString = file.permissions + " " + file.owner + " " + file.group + " " + file.size + " " + fileString
+    end if
+    if file.__isa.hasIndex("is_symlink") and file.is_symlink then
+      if detail then fileString = fileString + "-->" + file.path(true)
+      if gsh.helpers.colors.hasIndex("symlink") then fileString = fileString.color("symlink")
+    else if file.is_folder and gsh.helpers.colors.hasIndex("folder") then
+      fileString = fileString.color("folder")
+    else if file.is_binary and gsh.helpers.colors.hasIndex("binary") then
+      fileString = fileString.color("binary")
+    else
+      fileString = fileString.color("white")
+    end if
+    return fileString.trim
   end function
 
   return helpers

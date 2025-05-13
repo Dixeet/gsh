@@ -1,0 +1,93 @@
+ls = function
+  cli = new gsh.Cli
+  cli.init("ls", "ls")
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+    getFileName = function(file)
+      return file.name
+    end function
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+
+    folder = gsh.ctx.currentPath
+    if self.args then folder = self.args[0]
+    folder = gsh.getFile(folder)
+
+    if not folder then
+      error = "ls: No such file or directory"
+      print(error.color("error"))
+      return error
+    end if
+
+    files = []
+    if folder.is_folder then files = folder.get_folders + folder.get_files else files.push(folder)
+    if not self.options.time then files = files.sortBy(@getFileName)
+    if self.options.reverse then files.reverse
+
+    res = []
+    for file in files
+      res.push(gsh.helpers.getFileString(file, self.options.list or self.options.listAll))
+    end for
+
+    res = format_columns(res.join(char(10)))
+    print(res)
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.list = new cli.CliOption + {
+    "name": "--list",
+    "alias": "-l",
+    "description": "Long listing format with detail",
+  }
+  opts.listAll = new cli.CliOption + {
+    "name": "-la",
+    "description": "Same as -l",
+  }
+  opts.time = new cli.CliOption + {
+    "name": "--time",
+    "alias": "-t",
+    "description": "Sort by time",
+  }
+  opts.reverse = new cli.CliOption + {
+    "name": "--reverse",
+    "alias": "-r",
+    "description": "Reverse sorted list",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "ls [OPTION]... [<path>]",
+    "ls -la",
+    "ls /home/guest",
+    "ls -l -t /bin",
+    "ls -l -r /lib",
+  ]
+  cli.definition.sections = [
+    "",
+    "List all files in <path>",
+    "[default <path> = current_path]",
+    "[default sort by name]",
+  ]
+
+  return cli
+end function

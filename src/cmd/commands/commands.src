@@ -2,11 +2,13 @@
 #include "exit.src";
 #include "clear.src";
 #include "cd.src";
+#include "ls.src";
 commands = function
   commands = {}
   commands.example = example
   commands.exit = exitCmd
   commands.clear = clear
   commands.cd = cd
+  commands.ls = ls
   return commands
 end function
