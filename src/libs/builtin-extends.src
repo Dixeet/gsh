@@ -1,4 +1,9 @@
 builtinExtends = function
+
+
+  // ////////////////////////////////////////////////
+  // list map                                     //
+  // ////////////////////////////////////////////////
   find = function(where, returnIndex = false)
     itemFound = null
     indexFound = null
@@ -22,14 +27,43 @@ builtinExtends = function
   isTrue = function(index)
     return self.hasIndex(index) and self[index]
   end function
+
+  sortBy = function(cb, reverse = false)
+    res = []
+    tmp = []
+    for item in self.values
+      tmp.push(cb(item))
+    end for
+    tmp.sort(null, not reverse)
+    for t in tmp
+      for value in self.values
+        if cb(value) == t then
+          res.push(value)
+          break
+        end if
+      end for
+    end for
+    return res
+  end function
+
   list.find = @find
   map.find = @find
   list.t = @isTrue
   map.t = @isTrue
+  list.sortBy = @sortBy
+  map.sortBy = @sortBy
+
+  // ////////////////////////////////////////////////
+  // number                                        //
+  // ////////////////////////////////////////////////
 
   number.to_int = function
     return self
   end function
+
+  // ////////////////////////////////////////////////
+  // string                                     //
+  // ////////////////////////////////////////////////
 
   surroundEachLineWith = function(inputStr, s, e)
     inputStr = inputStr.replace(char(13), "")
