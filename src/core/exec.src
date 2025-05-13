@@ -17,14 +17,14 @@ exec = function
       exePaths = gsh.helpers.exePossiblePaths(cmd)
       launched = false
       for path in exePaths
-        exe = get_shell.host_computer.File(path)
+        exe = gsh.ctx.local.computer.File(path)
         if exe then
           launched = true
-          get_shell.launch(path, args.join(" "))
+          gsh.ctx.local.shell.launch(path, args.join(" "))
           break
         end if
       end for
-      if not launched then get_shell.launch(cmd, args.join(" "))
+      if not launched then gsh.ctx.local.shell.launch(cmd, args.join(" "))
     end function
 
 
