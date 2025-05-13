@@ -1,0 +1,70 @@
+cd = function
+  cli = new gsh.Cli
+  cli.init("cd", "cd")
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+
+    if not gsh.t("ctx") or not gsh.ctx.t("currentPath") then gsh.ctx.currentPath = home_dir
+    cd = gsh.ctx.local.computer.File(gsh.ctx.currentPath)
+
+    if not self.args or not self.args[0] then
+      gsh.ctx.currentPath = home_dir
+      return false
+    end if
+    if not cd then
+      error = "Path error"
+      print(error.color("error"))
+      return error
+    end if
+    if self.args[0] == ".." then
+      if cd.name != "/" then
+        gsh.ctx.currentPath = cd.parent.path
+      end if
+      return false
+    end if
+    new_path = gsh.ctx.local.computer.File(gsh.helpers.path.normalize(self.args[0]))
+    if new_path then
+      if new_path.is_folder then
+        gsh.ctx.currentPath = new_path.path
+      else
+        error = "cd: " + new_path.path + " is not a directory."
+        print(error.color("error"))
+        return error
+      end if
+    else
+      error = "cd: " + self.args[0] + " not found."
+      print(error.color("error"))
+      return error
+    end if
+    return false
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [ "cd [<path>]" ]
+  cli.definition.sections = [
+    "",
+    "Change current working directory to <path>",
+  ]
+
+  return cli
+end function

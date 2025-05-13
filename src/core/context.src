@@ -1,6 +1,11 @@
 ctx = function
   ctx = {
     "mode": "os",
+    "currentPath": current_path,
+    "local": {
+      "shell": get_shell,
+      "computer": get_shell.host_computer,
+    },
   }
   return ctx
 end function

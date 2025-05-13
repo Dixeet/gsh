@@ -1,5 +1,9 @@
 _gsh = function
   return function(params)
+
+    // ////////////////////////////////////////////////
+    // functions                                     //
+    // ////////////////////////////////////////////////
     trimParams = function(params)
       paramsStr = params.join(" ")
       if paramsStr.trim then return paramsStr.trim.split("  *") else return []
@@ -13,6 +17,9 @@ _gsh = function
       return params
     end function
 
+    // ////////////////////////////////////////////////
+    // main                                          //
+    // ////////////////////////////////////////////////
     if not params then params = globals.params
     params = trimParams(params)
     params = handleDebugParam(params)

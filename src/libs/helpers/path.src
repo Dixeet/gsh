@@ -20,7 +20,8 @@ path = function
 
   path.normalize = function(path)
     path = self.sanitize(path)
-    if path isa string and path and path[0] != "/" then path = current_path + "/" + path
+    if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
+    if path isa string and path and path[0] != "/" then path = currentPath + "/" + path
     path = self.sanitize(path)
     relativeSplit = path.split("\.\.")
     if relativeSplit and relativeSplit.len > 1 then
