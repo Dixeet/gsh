@@ -1,0 +1,46 @@
+#include "../src/imports.src";
+
+p1 = "/etc/test.txt"
+p2 = "foo.md"
+p3 = "../../toto/tata.html"
+p4 = "/home/lilo/../guest"
+p5 = "./baz"
+p6 = "/foo/bar//baz/asdf/quux/.."
+
+path = gsh.helpers.path
+
+print(path.normalize(p1))
+print(path.normalize(p2))
+print(path.normalize(p3))
+print(path.normalize(p4))
+print(path.normalize(p5))
+print(path.normalize(p6))
+print
+// /etc/test.txt
+// /home/test/foo.md
+// /toto/tata.html
+// /home/guest
+// /home/test/baz
+// /foo/bar/baz/asdf
+
+
+print(path.resolve([
+  "/foo/bar",
+  "./baz",
+]))
+
+print(path.resolve([
+  "/foo/bar",
+  "/tmp/file/",
+]))
+
+print(path.resolve([
+  "wwwroot",
+  "static_files/png/",
+  "../gif/image.gif",
+]))
+print(path.resolve([ "ls" ]))
+// /foo/bar/baz
+// /tmp/file
+// /home/test/node/wwwroot/static_files/gif/image.gif
+print(path.basename(p3))

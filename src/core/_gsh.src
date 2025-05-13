@@ -1,0 +1,32 @@
+_gsh = function
+  return function(params)
+
+    // ////////////////////////////////////////////////
+    // functions                                     //
+    // ////////////////////////////////////////////////
+    trimParams = function(params)
+      paramsStr = params.join(" ")
+      if paramsStr.trim then return paramsStr.trim.split("  *") else return []
+    end function
+
+    handleDebugParam = function(params)
+      params = params[ : ]
+      if gsh.settings.debug.passthrough then return params
+      indexOfDebug = params.indexOf("--debug")
+      if indexOfDebug != null then params.remove(indexOfDebug)
+      return params
+    end function
+
+    // ////////////////////////////////////////////////
+    // main                                          //
+    // ////////////////////////////////////////////////
+    if not params then params = globals.params
+    params = trimParams(params)
+    params = handleDebugParam(params)
+    cli = new gsh.Cli
+    cli.init("GSH CLI", "gsh")
+    cli.parseParams(params)
+
+    gsh.core.exec(params)
+  end function
+end function

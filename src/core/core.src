@@ -1,0 +1,13 @@
+#include "context.src";
+#include "_gsh.src";
+#include "exec.src";
+#include "prompt-mode.src";
+core = function
+  core = {}
+
+  core._gsh = _gsh
+  core.exec = exec
+  core.promptMode = promptMode
+
+  return core
+end function

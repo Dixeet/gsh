@@ -1,0 +1,22 @@
+ask = function
+  return function(question, choices, defaultChoice)
+    bang = "||>"
+    choicesStr = ""
+    if choices then
+      if defaultChoice != null then
+        defaultChoice = choices[0]
+      end if
+      choicesStr = " ["
+      for choice in choices
+        if choice == defaultChoice then choice = choice.upper.bold
+        choicesStr = choicesStr + choice + "/"
+      end for
+      choicesStr = choicesStr[0 : -1] + "]"
+      bang = "||:"
+    end if
+    print(question + choicesStr)
+    res = user_input(bang, false, choices != null and choices)
+    if not res then res = defaultChoice
+    return res
+  end function
+end function

@@ -1,0 +1,15 @@
+settings = function
+  settings = {
+    "debug": {
+      "enabled": false,
+      "passthrough": true,
+    },
+    "onExit": {
+      "confirm": true,
+      "defaultAnswer": "y",
+    },
+    "PATH": "/root/dev/bin:/root/bin:/bin"
+  }
+
+  return settings
+end function

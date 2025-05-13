@@ -1,0 +1,32 @@
+#include "colors.src";
+#include "ask.src";
+#include "path.src";
+
+helpers = function
+  helpers = {}
+
+  helpers.colors = colors
+  helpers.ask = ask
+  helpers.path = path
+  helpers.exePossiblePaths = function(file)
+    paths = []
+    if file isa string then
+    if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
+      paths.push(helpers.path.resolve([
+        currentPath,
+        file,
+      ]))
+      if gsh and gsh.t("settings") and gsh.settings.t("PATH") then
+        for path in gsh.settings.PATH.split(":")
+          paths.push(helpers.path.resolve([
+            path,
+            file,
+          ]))
+        end for
+      end if
+    end if
+    return paths
+  end function
+
+  return helpers
+end function

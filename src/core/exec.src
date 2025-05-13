@@ -1,0 +1,46 @@
+exec = function
+  return function(input)
+    // ////////////////////////////////////////////////
+    // functions                                     //
+    // ////////////////////////////////////////////////
+    execCmd = function(cmd, args)
+      res = null
+      if typeof(@cmd) == "function" then
+        res = cmd(args)
+      else if cmd isa gsh.Cli then
+        res = cmd.exec(args)
+      end if
+      return res
+    end function
+
+    execLocally = function(cmd, args)
+      exePaths = gsh.helpers.exePossiblePaths(cmd)
+      launched = false
+      for path in exePaths
+        exe = gsh.getFile(path)
+        if exe then
+          launched = true
+          gsh.ctx.local.shell.launch(path, args.join(" "))
+          break
+        end if
+      end for
+      if not launched then gsh.ctx.local.shell.launch(cmd, args.join(" "))
+    end function
+
+
+    // ////////////////////////////////////////////////
+    // main                                          //
+    // ////////////////////////////////////////////////
+    if not input isa list or not input then
+      gsh.core.promptMode.prompt
+    else
+      cmd = input[0]
+      args = input[1 : ]
+      if gsh.commands.hasIndex(cmd) then
+        execCmd(gsh.commands[cmd], args)
+      else
+        execLocally(cmd, args)
+      end if
+    end if
+  end function
+end function

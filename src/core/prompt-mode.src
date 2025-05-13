@@ -1,0 +1,22 @@
+promptMode = function
+  promptMode = {}
+  promptMode.run = false
+
+  promptMode.prompt = function
+    if not self.run then
+      self.run = true
+      while (self.run)
+        gsh.ctx.mode = "prompt"
+        input = user_input(gsh.prompt)
+        if input.trim then input = input.trim.split("  *") else input = []
+        gsh.core.exec(input)
+      end while
+    end if
+  end function
+
+  promptMode.exit = function
+    self.run = false
+  end function
+
+  return promptMode
+end function

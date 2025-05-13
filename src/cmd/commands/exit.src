@@ -1,0 +1,47 @@
+exitCmd = function
+  cli = new gsh.Cli
+  cli.init("Exit", "exit")
+
+  cli.exec = function(params)
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+
+    res = null
+
+    if self.args then res = self.args[0] else res = "y"
+
+    if gsh.settings.onExit.confirm and not self.args then
+      res = gsh.helpers.ask("Exit?", [
+        "y",
+        "n",
+      ], gsh.settings.onExit.defaultAnswer)
+    end if
+
+    if res == "y" then
+      if self.options.hard then exit else gsh.core.promptMode.exit
+    end if
+
+  end function
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.hard = new cli.CliOption + {
+    "name": "--hard",
+    "description": "Hard exit gsh",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "exit",
+    "exit y",
+    "exit --hard y",
+  ]
+
+  return cli
+end function
