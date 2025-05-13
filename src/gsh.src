@@ -1,5 +1,12 @@
 import_code("imports.src")
 
+// ################################################
+// ################################################
+// ############ Begin of customization ############
+
+// ////////////////////////////////////////////////
+// Config                                        //
+// ////////////////////////////////////////////////
 config = {
   "debug": {
     "enabled": true,
@@ -8,7 +15,19 @@ config = {
   "onExit": { "confirm": false },
 }
 
+// ////////////////////////////////////////////////
+// Prompt                                        //
+// ////////////////////////////////////////////////
+gsh.prompt = function
+  bang = "|>"
+  pp = active_user + "@" + gsh.ctx.local.computer.get_name + ":" + gsh.ctx.currentPath + bang
+  return pp
+end function
+
+// ############# End of customization #############
+// ################################################
+// ################################################
+
 gsh.settings += config
-debug(gsh.settings, "gsh.settings")
 
 gsh.core._gsh(params)

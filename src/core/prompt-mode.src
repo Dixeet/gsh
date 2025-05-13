@@ -5,11 +5,9 @@ promptMode = function
   promptMode.prompt = function
     if not self.run then
       self.run = true
-      bang = "|>"
       while (self.run)
         gsh.ctx.mode = "prompt"
-        pp = active_user + "@" + gsh.ctx.local.computer.get_name + ":" + gsh.ctx.currentPath + bang
-        input = user_input(pp)
+        input = user_input(gsh.prompt)
         if input.trim then input = input.trim.split("  *") else input = []
         gsh.core.exec(input)
       end while
