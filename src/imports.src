@@ -3,6 +3,10 @@
 #include "cmd/cmd.src";
 #include "core/core.src";
 
+
+// ////////////////////////////////////////////////
+// main                                          //
+// ////////////////////////////////////////////////
 gsh = {}
 gsh.settings = settings
 gsh.helpers = helpers
@@ -10,3 +14,11 @@ gsh.ctx = ctx
 gsh.Cli = Cli
 gsh.commands = commands
 gsh.core = core
+
+
+// ////////////////////////////////////////////////
+// shorthands                                    //
+// ////////////////////////////////////////////////
+gsh.getFile = function(path)
+  return self.ctx.local.computer.File(self.helpers.path.normalize(path))
+end function

@@ -14,7 +14,7 @@ cd = function
     end if
 
     if not gsh.t("ctx") or not gsh.ctx.t("currentPath") then gsh.ctx.currentPath = home_dir
-    cd = gsh.ctx.local.computer.File(gsh.ctx.currentPath)
+    cd = gsh.getFile(gsh.ctx.currentPath)
 
     if not self.args or not self.args[0] then
       gsh.ctx.currentPath = home_dir
@@ -31,7 +31,7 @@ cd = function
       end if
       return false
     end if
-    new_path = gsh.ctx.local.computer.File(gsh.helpers.path.normalize(self.args[0]))
+    new_path = gsh.getFile(self.args[0])
     if new_path then
       if new_path.is_folder then
         gsh.ctx.currentPath = new_path.path

@@ -17,7 +17,7 @@ exec = function
       exePaths = gsh.helpers.exePossiblePaths(cmd)
       launched = false
       for path in exePaths
-        exe = gsh.ctx.local.computer.File(path)
+        exe = gsh.getFile(path)
         if exe then
           launched = true
           gsh.ctx.local.shell.launch(path, args.join(" "))
