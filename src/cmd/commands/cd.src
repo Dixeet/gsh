@@ -25,12 +25,6 @@ cd = function
       print(error.color("error"))
       return error
     end if
-    if self.args[0] == ".." then
-      if cd.name != "/" then
-        gsh.ctx.currentPath = cd.parent.path
-      end if
-      return false
-    end if
     new_path = gsh.getFile(self.args[0])
     if new_path then
       if new_path.is_folder then

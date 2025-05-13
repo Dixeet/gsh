@@ -28,7 +28,7 @@ path = function
       current = relativeSplit[0]
       for i in relativeSplit.indexes
         if i then
-          current = self.parentPath(current) + relativeSplit[i]
+          current = self.sanitize(self.parentPath(current) + relativeSplit[i])
         end if
       end for
       path = current
