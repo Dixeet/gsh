@@ -19,16 +19,19 @@ mv = function
       return 
     end if
 
+    logger = Logger(self.options.silent)
+    log = @logger.log
+
     if not self.args or not self.args[0] or not self.args[1] then
       error = "mv: expects 2 parameters"
-      print(error.color("error"))
+      logger.error(error)
       return error
     end if
 
     file = gsh.getFile(gsh.normalize(self.args[0]))
     if not file then
       error = "mv: " + self.args[0] + " no such file or directory"
-      print(error.color("error"))
+      logger.error(error)
       return error
     end if
 
@@ -39,19 +42,19 @@ mv = function
       if destination.is_folder then
         path = destination.path
         name = file.name
-        else
+      else
         path = destination.parent.path
         name = destination.name
       end if
     else
       spl = gsh.normalize(self.args[1]).split("/")
-      path = spl[:-1].join("/")
+      path = spl[ : -1].join("/")
       name = spl[-1]
     end if
 
     res = file.move(path, name)
 
-    if res isa string then print(res.color("error"))
+    if res isa string then logger.error(res) else log("mv: " + file.path + " -> " + gsh.normalize(self.args[1]))
 
     return res
 
@@ -67,6 +70,10 @@ mv = function
     "name": "--help",
     "alias": "-h",
     "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
   }
   cli.definition.options = opts
   cli.definition.usages = [
