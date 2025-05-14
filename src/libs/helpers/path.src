@@ -1,15 +1,15 @@
 path = function
-  path = {}
+  _path = {}
 
-  path.basename = function(path)
-    if path then return self.sanitize(path).split("/")[-1]
+  _path.basename = function(path)
+    if path then return _path.sanitize(path).split("/")[-1]
   end function
 
-  path.parentPath = function(path)
+  _path.parentPath = function(path)
     if path isa string and path then return parent_path(path)
   end function
 
-  path.sanitize = function(path)
+  _path.sanitize = function(path)
     if path isa string then
       path = path.trim
       if path.len > 1 and path[-1] == "/" then path = path[ : -1]
@@ -18,30 +18,36 @@ path = function
     end if
   end function
 
-  path.normalize = function(path)
-    path = self.sanitize(path)
+  _path.join = function(paths)
+    res = null
+    if paths isa list then res = _path.sanitize(paths.join("/"))
+    return res
+  end function
+
+  _path.normalize = function(path)
+    path = _path.sanitize(path)
     if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
     if path isa string and path and path[0] != "/" then path = currentPath + "/" + path
-    path = self.sanitize(path)
+    path = _path.sanitize(path)
     relativeSplit = path.split("\.\.")
     if relativeSplit and relativeSplit.len > 1 then
       current = relativeSplit[0]
       for i in relativeSplit.indexes
         if i then
-          current = self.sanitize(self.parentPath(current) + relativeSplit[i])
+          current = _path.sanitize(_path.parentPath(current) + relativeSplit[i])
         end if
       end for
       path = current
     end if
-    return self.sanitize(path)
+    return _path.sanitize(path)
   end function
 
-  path.resolve = function(paths)
+  _path.resolve = function(paths)
     if paths isa list and paths.len > 1 then
       current = paths[0]
       for i in paths.indexes
         if i then
-          currentPath = self.sanitize(paths[i])
+          currentPath = _path.sanitize(paths[i])
           if currentPath and currentPath[0] == "/" then
             current = currentPath
           else
@@ -49,9 +55,9 @@ path = function
           end if
         end if
       end for
-      return self.normalize(current)
+      return _path.normalize(current)
     end if
   end function
 
-  return path
+  return _path
 end function

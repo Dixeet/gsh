@@ -1,0 +1,84 @@
+mv = function
+  cli = new gsh.Cli
+  cli.init("mv", "mv")
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+    getFileName = function(file)
+      return file.name
+    end function
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+
+    if not self.args or not self.args[0] or not self.args[1] then
+      error = "mv: expects 2 parameters"
+      print(error.color("error"))
+      return error
+    end if
+
+    file = gsh.getFile(gsh.normalize(self.args[0]))
+    if not file then
+      error = "mv: " + self.args[0] + " no such file or directory"
+      print(error.color("error"))
+      return error
+    end if
+
+    destination = gsh.getFile(gsh.normalize(self.args[1]))
+    path = null
+    name = null
+    if destination then
+      if destination.is_folder then
+        path = destination.path
+        name = file.name
+        else
+        path = destination.parent.path
+        name = destination.name
+      end if
+    else
+      spl = gsh.normalize(self.args[1]).split("/")
+      path = spl[:-1].join("/")
+      name = spl[-1]
+    end if
+
+    res = file.move(path, name)
+
+    if res isa string then print(res.color("error"))
+
+    return res
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "mv (<file>|<folder>) (<destination_file> | <destination_folder>)",
+    "mv foo.txt bar.txt",
+    "mv /home/guest/welcome.pdf ../Downloads/",
+  ]
+  cli.definition.sections = [
+    "",
+    "Move a file or folder to a new path",
+    "Also used to rename files or folders",
+  ]
+
+  return cli
+end function

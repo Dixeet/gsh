@@ -3,6 +3,7 @@
 #include "clear.src";
 #include "cd.src";
 #include "ls.src";
+#include "mv.src";
 commands = function
   commands = {}
   commands.example = example
@@ -10,5 +11,6 @@ commands = function
   commands.clear = clear
   commands.cd = cd
   commands.ls = ls
+  commands.mv = mv
   return commands
 end function

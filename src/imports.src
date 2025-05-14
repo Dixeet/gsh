@@ -22,3 +22,5 @@ gsh.core = core
 gsh.getFile = function(path)
   return self.ctx.local.computer.File(self.helpers.path.normalize(path))
 end function
+
+gsh.normalize = @gsh.helpers.path.normalize
