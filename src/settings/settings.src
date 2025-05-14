@@ -1,14 +1,24 @@
 settings = function
-#include "../libs/helpers/colors.src"
+  #include "../libs/helpers/colors.src";
 
   settings = {
     "debug": {
       "enabled": false,
       "passthrough": true,
     },
-    "onExit": {
-      "confirm": true,
-      "defaultAnswer": "y",
+    "behavior": {
+      "onExit": {
+        "confirm": true,
+        "defaultAnswer": "y",
+      },
+      "onRm": {
+        "confirm": true,
+        "defaultAnswer": "n",
+      },
+      "onCpAlreadyExists": {
+        "confirm": true,
+        "defaultAnswer": "n",
+      },
     },
     "PATH": "/root/dev/bin:/root/bin:/bin",
     "colors": {

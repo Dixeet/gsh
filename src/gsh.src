@@ -12,7 +12,7 @@ config = {
     "enabled": true,
     "passthrough": false,
   },
-  "onExit": { "confirm": false },
+  "behavior": { "onExit": { "confirm": false } },
 }
 
 // ////////////////////////////////////////////////

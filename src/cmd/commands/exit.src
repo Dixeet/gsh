@@ -13,11 +13,11 @@ exitCmd = function
 
     if self.args then res = self.args[0] else res = "y"
 
-    if gsh.settings.onExit.confirm and not self.args then
+    if gsh.settings.behavior.onExit.confirm and not self.args then
       res = gsh.helpers.ask("Exit?", [
         "y",
         "n",
-      ], gsh.settings.onExit.defaultAnswer)
+      ], gsh.settings.behavior.onExit.defaultAnswer)
     end if
 
     if res == "y" then
