@@ -1,4 +1,6 @@
 settings = function
+#include "../libs/helpers/colors.src"
+
   settings = {
     "debug": {
       "enabled": false,
@@ -8,7 +10,20 @@ settings = function
       "confirm": true,
       "defaultAnswer": "y",
     },
-    "PATH": "/root/dev/bin:/root/bin:/bin"
+    "PATH": "/root/dev/bin:/root/bin:/bin",
+    "colors": {
+      "primary": colors.cyanLight,
+      "secondary": colors.tealLight,
+      "tertiary": colors.purpleLight,
+      "accent": colors.orange,
+      "info": colors.indigoLight,
+      "success": colors.green,
+      "warn": colors.amber,
+      "error": colors.red,
+      "folder": colors.blueLight,
+      "binary": colors.pink,
+      "symlink": colors.orangeLight,
+    },
   }
 
   return settings

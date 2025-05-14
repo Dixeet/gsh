@@ -19,7 +19,7 @@ config = {
 // Prompt                                        //
 // ////////////////////////////////////////////////
 gsh.prompt = function
-  bang = "|>"
+  bang = "|> "
   pp = active_user + "@" + gsh.ctx.local.computer.get_name + ":" + gsh.ctx.currentPath + bang
   return pp
 end function
