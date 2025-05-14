@@ -59,5 +59,13 @@ path = function
     end if
   end function
 
+  _path.parse = function(path)
+    spl = gsh.normalize(path).split("/")
+    return {
+      "dir": spl[ : -1].join("/"),
+      "name": spl[-1],
+    }
+  end function
+
   return _path
 end function

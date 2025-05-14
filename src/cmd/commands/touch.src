@@ -1,0 +1,77 @@
+touch = function
+  cli = new gsh.Cli
+  cli.init("touch", "touch")
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+    getFileName = function(file)
+      return file.name
+    end function
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+    logger = Logger(self.options.silent)
+    log = @logger.log
+
+    if not self.args or not self.args[0] then
+      error = "touch: expects atleast <path> argument"
+      logger.error(error)
+      return error
+    end if
+
+    path = gsh.normalize(self.args[0])
+    parsedPath = gsh.helpers.path.parse(path)
+    create = gsh.ctx.local.computer.touch(parsedPath.dir, parsedPath.name)
+
+    if create isa string then
+      logger.error(create)
+      return 
+    end if
+
+    file = gsh.getFile(path)
+    if self.args.len > 1 and self.args[1] then
+      file.set_content(self.args[1 : ].join(" "))
+    end if
+
+    return file
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  cli.definition.usages = [
+    "touch <path> [<content>]...",
+    "touch foo",
+    "touch /home/guest/my_file.txt foo bar baz",
+  ]
+  cli.definition.sections = [
+    "",
+    "Create a file at <path>",
+    "Set contents from the rest of the arguments",
+  ]
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+
+
+  return cli
+end function

@@ -22,7 +22,7 @@ mv = function
     logger = Logger(self.options.silent)
     log = @logger.log
 
-    if not self.args or not self.args[0] or not self.args[1] then
+    if not self.args or not self.args.len > 2 then
       error = "mv: expects 2 parameters"
       logger.error(error)
       return error
@@ -47,9 +47,9 @@ mv = function
         name = destination.name
       end if
     else
-      spl = gsh.normalize(self.args[1]).split("/")
-      path = spl[ : -1].join("/")
-      name = spl[-1]
+      parse = gsh.helpers.path.parse(self.args[1])
+      path = parse.dir
+      name = parse.name
     end if
 
     res = file.move(path, name)

@@ -4,6 +4,7 @@
 #include "cd.src";
 #include "ls.src";
 #include "mv.src";
+#include "touch.src";
 commands = function
   commands = {}
   commands.example = example
@@ -12,5 +13,6 @@ commands = function
   commands.cd = cd
   commands.ls = ls
   commands.mv = mv
+  commands.touch = touch
   return commands
 end function
