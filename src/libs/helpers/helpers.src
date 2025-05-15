@@ -1,6 +1,7 @@
 #include "colors.src";
 #include "ask.src";
 #include "path.src";
+#include "glob.src";
 
 helpers = function
   helpers = {}
@@ -8,6 +9,7 @@ helpers = function
   helpers.colors = colors
   helpers.ask = ask
   helpers.path = path
+  helpers.glob = glob
 
   helpers.exePossiblePaths = function(file)
     paths = []

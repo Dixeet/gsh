@@ -119,4 +119,8 @@ builtinExtends = function
   string.bold = function
     return surroundEachLineWith(self, "<b>", "</b>")
   end function
+
+  string.matchGlob = function(pattern)
+    return gsh.helpers.glob.isMatch(self, pattern)
+  end function
 end function

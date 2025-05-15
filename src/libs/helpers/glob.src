@@ -1,0 +1,26 @@
+glob = function
+  glob = {}
+
+  glob.sanitize = function(pattern)
+    pattern = pattern.replace("\\", "\\")
+    pattern = pattern.replace("\.", "\.")
+    pattern = pattern.replace("\/", "\/")
+    return pattern
+  end function
+
+  glob.isMatch = function(s, pattern)
+    regex = "^[^\/]*"
+    splPattern = pattern.split("\*\*\/")
+    if splPattern and splPattern.len > 1 then
+      regex = "^.*"
+      pattern = splPattern[-1]
+    end if
+
+    if pattern[0] == "*" then pattern = pattern[1:]
+    pattern = glob.sanitize(pattern)
+    regex = regex + pattern.replace("\*", ".*")
+    return s.is_match(regex)
+  end function
+
+  return glob
+end function
