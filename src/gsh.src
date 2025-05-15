@@ -28,6 +28,6 @@ end function
 // ################################################
 // ################################################
 
-gsh.settings += config
+gsh.settings.merge(config)
 
 gsh.core._gsh(params)

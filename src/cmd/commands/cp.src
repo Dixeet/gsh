@@ -1,0 +1,101 @@
+cp = function
+  cli = new gsh.Cli
+  cli.init("cp", "cp")
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+    getFileName = function(file)
+      return file.name
+    end function
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+
+    logger = Logger(self.options.silent)
+    log = @logger.log
+
+    if not self.args or not self.args.len > 1 then
+      error = "cp: expects 2 parameters"
+      logger.error(error)
+      return error
+    end if
+
+    file = gsh.getFile(gsh.normalize(self.args[0]))
+    if not file then
+      error = "cp: " + self.args[0] + " no such file or directory"
+      logger.error(error)
+      return error
+    end if
+
+    destination = gsh.getFile(gsh.normalize(self.args[1]))
+    path = null
+    name = null
+    if destination then
+      if destination.is_folder then
+        path = destination.path
+        name = file.name
+      else
+        path = destination.parent.path
+        name = destination.name
+        ask = null
+        print(gsh.settings.behavior.onCpAlreadyExists.defaultAnswer)
+        if gsh.settings.behavior.onCpAlreadyExists.confirm then
+          ask = gsh.helpers.ask(name + " already exists, overwrite?", [
+            "y",
+            "n",
+          ], gsh.settings.behavior.onCpAlreadyExists.defaultAnswer)
+        end if
+        if ask == "n" then
+          return null
+        end if
+      end if
+    else
+      parse = gsh.helpers.path.parse(self.args[1])
+      path = parse.dir
+      name = parse.name
+    end if
+
+    res = file.copy(path, name)
+
+    if res isa string then logger.error(res) else res = gsh.getFile(gsh.helpers.path.resolve([path, name]))
+
+    return res
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "cp (<file>|<folder>) (<destination_file> | <destination_folder>)",
+    "cp foo.txt bar.txt",
+    "cp /home/guest/welcome.pdf ../Downloads/",
+  ]
+  cli.definition.sections = [
+    "",
+    "Copy a file or folder to a new path",
+  ]
+
+  return cli
+end function
