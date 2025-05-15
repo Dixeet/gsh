@@ -46,12 +46,25 @@ builtinExtends = function
     return res
   end function
 
+  // ! mutate the map ////////////////////////////////////
+  merge = function(m)
+    for k in m.indexes
+      if self[k] isa map and m[k] isa map then
+        self[k].merge(m[k])
+      else
+        self[k] = m[k]
+      end if
+    end for
+    return self
+  end function
+
   list.find = @find
   map.find = @find
   list.t = @isTrue
   map.t = @isTrue
   list.sortBy = @sortBy
   map.sortBy = @sortBy
+  map.merge = @merge
 
   // ////////////////////////////////////////////////
   // number                                        //
