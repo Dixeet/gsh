@@ -22,7 +22,7 @@ mv = function
     logger = Logger(self.options.silent)
     log = @logger.log
 
-    if not self.args or not self.args.len > 2 then
+    if not self.args or not self.args.len > 1 then
       error = "mv: expects 2 parameters"
       logger.error(error)
       return error
