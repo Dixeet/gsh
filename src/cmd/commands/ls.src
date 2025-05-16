@@ -38,7 +38,7 @@ ls = function
 
     res = []
     for file in files
-      res.push(gsh.helpers.getFileString(file, self.options.list or self.options.listAll))
+      res.push(gsh.helpers.getFileString(file, { "long": self.options.list or self.options.listAll }))
     end for
 
     res = format_columns(res.join(char(10)))
@@ -79,9 +79,9 @@ ls = function
     "description": "Reverse sorted list",
   }
   opts.silent = new cli.CliOption + {
-      "name": "--silent",
-      "description": "Silent output",
-    }
+    "name": "--silent",
+    "description": "Silent output",
+  }
   cli.definition.options = opts
   cli.definition.usages = [
     "ls [OPTION]... [<path>]",
