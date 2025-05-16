@@ -6,6 +6,8 @@
 #include "mv.src";
 #include "touch.src";
 #include "cp.src";
+#include "tree.src";
+
 commands = function
   commands = {}
   commands.example = example
@@ -15,5 +17,6 @@ commands = function
   commands.ls = ls
   commands.mv = mv
   commands.cp = cp
+  commands.tree = tree
   return commands
 end function

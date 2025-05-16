@@ -1,0 +1,149 @@
+tree = function
+  cli = new gsh.Cli
+  cli.init("Tree", "tree")
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+    recursiveLs = function(dir, params)
+      res = {
+        "file": gsh.getFile(dir),
+        "children": [],
+      }
+
+      if res.file.is_folder then
+        children = gsh.commands.ls.exec([ res.file.path ] + params)
+        for file in children
+          child = recursiveLs(file.path, params)
+          res.children.push(child)
+        end for
+      end if
+      return res
+    end function
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then
+      print(self.help)
+      return 
+    end if
+
+    logger = Logger(self.options.silent)
+    log = @logger.log
+
+    dir = gsh.ctx.currentPath
+    if self.args then dir = self.args[0]
+
+    lsParams = [ "--silent" ]
+    if self.options.time then lsParams.push("-t")
+    if self.options.reverse then lsParams.push("-r")
+
+    res = recursiveLs(dir, lsParams)
+    recursivePrint = function(treeFile, prefix = "")
+      params = {
+        "permissions": self.options.permissions,
+        "owner": self.options.owner,
+        "group": self.options.group,
+        "size": self.options.size,
+        "long": self.options.long,
+      }
+      if not prefix then
+        fileName = gsh.helpers.getFileString(treeFile.file, { "customName": treeFile.file.path })
+      else if self.options.fullpath then
+        if res.file.path == "/" then params.customName = treeFile.file.path else params.customName = treeFile.file.path.replace(res.file.path, ".")
+        fileName = gsh.helpers.getFileString(treeFile.file, params)
+      else
+        fileName = gsh.helpers.getFileString(treeFile.file, params)
+      end if
+      name = prefix + fileName
+      log(name)
+      for i in treeFile.children.indexes
+        if i != treeFile.children.indexes.len - 1 then prefixLvl = "├" else prefixLvl = "└"
+        if prefix == "" then
+          newPrefix = prefixLvl + "─ "
+        else if prefix.len < 4 then
+          newPrefix = "│ " + prefixLvl + "─ "
+        else
+          newPrefix = prefix.replace("├─", "│").replace("└─", " ") + prefixLvl + "─ "
+        end if
+        recursivePrint(treeFile.children[i], newPrefix)
+      end for
+    end function
+    recursivePrint(res)
+
+    return res
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+  cli.definition.usages = [
+    "tree [OPTION]... [<dir>]",
+    "tree",
+    "tree -f /home/guest/",
+    "tree -f -p -u -g -s -t -r /",
+  ]
+  cli.definition.sections = [
+    "",
+    "List contents of <dir> in a tree-like format",
+    "<dir> is current directory if omitted",
+  ]
+
+  opts = {}
+  opts.fullpath = new cli.CliOption + {
+    "name": "--fullpath",
+    "alias": "-f",
+    "description": "Show full path prefix for each file relative to <dir>",
+  }
+  opts.permissions = new cli.CliOption + {
+    "name": "--permission",
+    "alias": "-p",
+    "description": "Print the permissions of each file",
+  }
+  opts.owner = new cli.CliOption + {
+    "name": "--user",
+    "alias": "-u",
+    "description": "Print the owner user",
+  }
+  opts.group = new cli.CliOption + {
+    "name": "--group",
+    "alias": "-g",
+    "description": "Print the owner group",
+  }
+  opts.size = new cli.CliOption + {
+    "name": "--size",
+    "alias": "-s",
+    "description": "Print the size of each file",
+  }
+  opts.long = new cli.CliOption + {
+    "name": "--long",
+    "alias": "-l",
+    "description": "Equivalent to -p -u -g -s",
+  }
+  opts.time = new cli.CliOption + {
+    "name": "--time",
+    "alias": "-t",
+    "description": "Sort by time",
+  }
+  opts.reverse = new cli.CliOption + {
+    "name": "--reverse",
+    "alias": "-r",
+    "description": "Reverse sorted tree",
+  }
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+
+  return cli
+end function
