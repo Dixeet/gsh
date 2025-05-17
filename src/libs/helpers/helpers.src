@@ -1,6 +1,8 @@
 #include "colors.src";
 #include "ask.src";
 #include "path.src";
+#include "glob.src";
+#include "file.src";
 
 helpers = function
   helpers = {}
@@ -8,10 +10,12 @@ helpers = function
   helpers.colors = colors
   helpers.ask = ask
   helpers.path = path
+  helpers.glob = glob
+
   helpers.exePossiblePaths = function(file)
     paths = []
     if file isa string then
-    if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
+      if gsh.t("ctx") and gsh.ctx.t("currentPath") then currentPath = gsh.ctx.currentPath else currentPath = current_path
       paths.push(helpers.path.resolve([
         currentPath,
         file,
@@ -27,6 +31,8 @@ helpers = function
     end if
     return paths
   end function
+
+  helpers.getFileString = @file.getFileString
 
   return helpers
 end function

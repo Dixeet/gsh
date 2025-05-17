@@ -11,9 +11,13 @@ Cli = function
   Cli.CliOption = CliOption
 
   // /////////////////////////////////////////////////////////////////////////////////////////////////
-  Cli.init = function(name = "", cmd = "")
+  Cli.init = function(name = "", cmd = "", autoHelp = true, autoSilent = true, os = false)
     self.name = name
     self.cmd = cmd
+    self.autoHelp = autoHelp
+    self.autoSilent = autoSilent
+    self.os = os
+    self.logger = Logger
     self.definition = {}
     self.definition.options = {}
     self.definition.usages = []
@@ -150,6 +154,11 @@ Cli = function
         addTo(param)
       end if
     end for
+    if this.autoSilent and this.options.hasIndex("silent") then this.logger = Logger(this.options.silent)
+    if this.autoHelp and this.options.hasIndex("help") and this.options.help then
+      this.logger.log(this.help)
+      return
+    end if
   end function
 
   return Cli

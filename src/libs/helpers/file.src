@@ -1,0 +1,44 @@
+file = function
+  file = {}
+
+  file.getFileString = function(file, params, fileNameCb)
+    params = {
+      "permissions": false,
+      "owner": false,
+      "group": false,
+      "size": false,
+      "long": false,
+      "customName": null,
+    } + params
+    if params.long then
+      params += {
+        "permissions": true,
+        "owner": true,
+        "group": true,
+        "size": true,
+        "long": true,
+      }
+    end if
+    fileString = ""
+    if params.permissions then fileString += file.permissions + " "
+    if params.owner then fileString += file.owner + " "
+    if params.group then fileString += file.group + " "
+    if params.size then fileString += file.size + " "
+
+    if params.customName then fileString += params.customName else fileString += file.name.trim
+
+    if file.__isa.hasIndex("is_symlink") and file.is_symlink then
+      if detail then fileString = fileString + "-->" + file.path(true)
+      if gsh.helpers.colors.hasIndex("symlink") then fileString = fileString.color("symlink")
+    else if file.is_folder and gsh.helpers.colors.hasIndex("folder") then
+      fileString = fileString.color("folder")
+    else if file.is_binary and gsh.helpers.colors.hasIndex("binary") then
+      fileString = fileString.color("binary")
+    else
+      fileString = fileString.color("white")
+    end if
+    return fileString.trim
+  end function
+
+  return file
+end function

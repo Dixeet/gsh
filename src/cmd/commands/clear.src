@@ -1,13 +1,9 @@
 clear = function
   cli = new gsh.Cli
-  cli.init("Clear", "clear")
+  cli.init("Clear", "clear", true, false, true)
 
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then
-      print(self.help)
-      return 
-    end if
     clear_screen
   end function
 

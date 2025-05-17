@@ -1,0 +1,25 @@
+globals.Logger = function(defaultToSilent = false)
+  logger = {}
+  logger.log = function(s, silent = null)
+    if silent == null then
+      if not defaultToSilent then print(s)
+    else
+      if not silent then print(s)
+    end if
+  end function
+  logger.error = function(s, silent = null)
+    if silent == null then
+      if not defaultToSilent then print(s.color("error"))
+    else
+      if not silent then print(s.color("error"))
+    end if
+  end function
+  logger.warn = function(s, silent = null)
+    if silent == null then
+      if not defaultToSilent then print(s.color("warn"))
+    else
+      if not silent then print(s.color("warn"))
+    end if
+  end function
+  return logger
+end function

@@ -3,7 +3,7 @@ ask = function
     bang = "||>"
     choicesStr = ""
     if choices then
-      if defaultChoice != null then
+      if defaultChoice == null then
         defaultChoice = choices[0]
       end if
       choicesStr = " ["

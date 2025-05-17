@@ -41,6 +41,9 @@ colors = function
   colors.success = colors.green
   colors.warn = colors.amber
   colors.error = colors.red
+  colors.folder = colors.blueLight
+  colors.binary = colors.pink
+  colors.symlink = colors.orangeLight
   if gsh and gsh.t("settings") and gsh.settings.t("colors") then
     colors = colors + gsh.settings.colors
   end if

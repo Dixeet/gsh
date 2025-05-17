@@ -2,11 +2,21 @@
 #include "exit.src";
 #include "clear.src";
 #include "cd.src";
+#include "ls.src";
+#include "mv.src";
+#include "touch.src";
+#include "cp.src";
+#include "tree.src";
+
 commands = function
   commands = {}
   commands.example = example
   commands.exit = exitCmd
   commands.clear = clear
   commands.cd = cd
+  commands.ls = ls
+  commands.mv = mv
+  commands.cp = cp
+  commands.tree = tree
   return commands
 end function
