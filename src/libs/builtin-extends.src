@@ -46,6 +46,18 @@ builtinExtends = function
     return res
   end function
 
+  findIndex = function(cb)
+    indexFound = null
+    for i in self.indexes
+      found = cb(self[i])
+      if found then
+        indexFound = i
+        break
+      end if
+    end for
+    return indexFound
+  end function
+
   // ! mutate the map ////////////////////////////////////
   merge = function(m)
     for k in m.indexes
@@ -65,6 +77,8 @@ builtinExtends = function
   list.sortBy = @sortBy
   map.sortBy = @sortBy
   map.merge = @merge
+  list.findIndex = @findIndex
+  map.findIndex = @findIndex
 
   // ////////////////////////////////////////////////
   // number                                        //
