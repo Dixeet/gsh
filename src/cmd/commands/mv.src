@@ -1,6 +1,6 @@
 mv = function
   cli = new gsh.Cli
-  cli.init("mv", "mv")
+  cli.init("mv", "mv", true, true, true)
 
 
   // ////////////////////////////////////////////////
@@ -14,24 +14,19 @@ mv = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then
-      print(self.help)
-      return 
-    end if
 
-    logger = Logger(self.options.silent)
-    log = @logger.log
+    log = @self.logger.log
 
     if not self.args or not self.args.len > 1 then
       error = "mv: expects 2 parameters"
-      logger.error(error)
+      self.logger.error(error)
       return error
     end if
 
     file = gsh.getFile(gsh.normalize(self.args[0]))
     if not file then
       error = "mv: " + self.args[0] + " no such file or directory"
-      logger.error(error)
+      self.logger.error(error)
       return error
     end if
 
@@ -54,7 +49,7 @@ mv = function
 
     res = file.move(path, name)
 
-    if res isa string then logger.error(res) else log("mv: " + file.path + " -> " + gsh.normalize(self.args[1]))
+    if res isa string then self.logger.error(res) else log("mv: " + file.path + " -> " + gsh.normalize(self.args[1]))
 
     return res
 

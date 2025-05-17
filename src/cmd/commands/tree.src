@@ -1,6 +1,6 @@
 tree = function
   cli = new gsh.Cli
-  cli.init("Tree", "tree")
+  cli.init("Tree", "tree", true, true, true)
 
 
   // ////////////////////////////////////////////////
@@ -26,13 +26,8 @@ tree = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then
-      print(self.help)
-      return 
-    end if
 
-    logger = Logger(self.options.silent)
-    log = @logger.log
+    log = @self.logger.log
 
     dir = gsh.ctx.currentPath
     if self.args then dir = self.args[0]

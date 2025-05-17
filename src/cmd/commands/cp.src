@@ -1,6 +1,6 @@
 cp = function
   cli = new gsh.Cli
-  cli.init("cp", "cp")
+  cli.init("cp", "cp", true, true, true)
 
 
   // ////////////////////////////////////////////////
@@ -14,24 +14,19 @@ cp = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then
-      print(self.help)
-      return 
-    end if
 
-    logger = Logger(self.options.silent)
-    log = @logger.log
+    log = @self.logger.log
 
     if not self.args or not self.args.len > 1 then
       error = "cp: expects 2 parameters"
-      logger.error(error)
+      self.logger.error(error)
       return error
     end if
 
     file = gsh.getFile(gsh.normalize(self.args[0]))
     if not file then
       error = "cp: " + self.args[0] + " no such file or directory"
-      logger.error(error)
+      self.logger.error(error)
       return error
     end if
 
@@ -65,7 +60,7 @@ cp = function
 
     res = file.copy(path, name)
 
-    if res isa string then logger.error(res) else res = gsh.getFile(gsh.helpers.path.resolve([path, name]))
+    if res isa string then self.logger.error(res) else res = gsh.getFile(gsh.helpers.path.resolve([path, name]))
 
     return res
 

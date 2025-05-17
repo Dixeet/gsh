@@ -1,13 +1,9 @@
 exitCmd = function
   cli = new gsh.Cli
-  cli.init("Exit", "exit")
+  cli.init("Exit", "exit", true, false, false)
 
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then
-      print(self.help)
-      return 
-    end if
 
     res = null
 

@@ -1,6 +1,6 @@
 touch = function
   cli = new gsh.Cli
-  cli.init("touch", "touch")
+  cli.init("touch", "touch", true, true, true)
 
 
   // ////////////////////////////////////////////////
@@ -14,16 +14,11 @@ touch = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then
-      print(self.help)
-      return 
-    end if
-    logger = Logger(self.options.silent)
-    log = @logger.log
+    log = @self.logger.log
 
     if not self.args or not self.args[0] then
       error = "touch: expects atleast <path> argument"
-      logger.error(error)
+      self.logger.error(error)
       return error
     end if
 
@@ -32,7 +27,7 @@ touch = function
     create = gsh.ctx.local.computer.touch(parsedPath.dir, parsedPath.name)
 
     if create isa string then
-      logger.error(create)
+      self.logger.error(create)
       return 
     end if
 
