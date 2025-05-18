@@ -60,11 +60,32 @@ path = function
   end function
 
   _path.parse = function(path)
-    spl = gsh.normalize(path).split("/")
+    spl = _path.normalize(path).split("/")
     return {
       "dir": spl[ : -1].join("/"),
       "name": spl[-1],
     }
+  end function
+
+  _path.relative = function(from, to)
+    from = _path.sanitize(from)
+    to = _path.sanitize(to)
+    if to == "/" then return _path.join([
+      to,
+      from,
+    ])
+    common = ""
+    for i in to.indexes
+      if from.hasIndex(i) and to[i] == from[i] then common += to[i] else break
+    end for
+    partialFrom = from.replace(common, "")
+    partialTo = to.replace(common, "")
+    if not partialTo then return "." + partialFrom
+    res = ""
+    for parent in partialTo.split("/")
+      res = "../" + res + parent + "/"
+    end for
+    return _path.sanitize(res)
   end function
 
   return _path
