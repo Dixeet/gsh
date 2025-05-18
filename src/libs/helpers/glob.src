@@ -9,6 +9,7 @@ glob = function
   end function
 
   glob.isMatch = function(s, pattern)
+    if s and s.len > 1 and s[0] == "." and s[1] == "/" then s = s[2 : ]
     regex = "^[^\/]*"
     splPattern = pattern.split("\*\*\/")
     if splPattern and splPattern.len > 1 then
@@ -16,9 +17,9 @@ glob = function
       pattern = splPattern[-1]
     end if
 
-    if pattern[0] == "*" then pattern = pattern[1:]
+    if pattern[0] == "*" then pattern = pattern[1 : ]
     pattern = glob.sanitize(pattern)
-    regex = regex + pattern.replace("\*", ".*")
+    regex = regex + pattern.replace("\*", ".*") + "$"
     return s.is_match(regex)
   end function
 
