@@ -7,12 +7,6 @@ mv = function
   // Exec                                          //
   // ////////////////////////////////////////////////
   cli.exec = function(params)
-    // functions ////////////////////////////////////
-    getFileName = function(file)
-      return file.name
-    end function
-
-    // main ////////////////////////////////////
     self.parseParams(params)
 
     log = @self.logger.log
@@ -49,7 +43,7 @@ mv = function
 
     res = file.move(path, name)
 
-    if res isa string then self.logger.error(res) else log("mv: " + file.path + " -> " + gsh.normalize(self.args[1]))
+    if res isa string then self.logger.error(res) else self.logger.success("mv: " + file.path + " -> " + gsh.normalize(self.args[1]))
 
     return res
 

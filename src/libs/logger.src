@@ -21,5 +21,12 @@ globals.Logger = function(defaultToSilent = false)
       if not silent then print(s.color("warn"))
     end if
   end function
+  logger.success = function(s, silent = null)
+      if silent == null then
+        if not defaultToSilent then print(s.color("success"))
+      else
+        if not silent then print(s.color("success"))
+      end if
+    end function
   return logger
 end function

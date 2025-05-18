@@ -7,12 +7,6 @@ cp = function
   // Exec                                          //
   // ////////////////////////////////////////////////
   cli.exec = function(params)
-    // functions ////////////////////////////////////
-    getFileName = function(file)
-      return file.name
-    end function
-
-    // main ////////////////////////////////////
     self.parseParams(params)
 
     log = @self.logger.log
@@ -41,7 +35,6 @@ cp = function
         path = destination.parent.path
         name = destination.name
         ask = null
-        print(gsh.settings.behavior.onCpAlreadyExists.defaultAnswer)
         if gsh.settings.behavior.onCpAlreadyExists.confirm then
           ask = gsh.helpers.ask(name + " already exists, overwrite?", [
             "y",

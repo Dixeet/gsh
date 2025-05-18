@@ -7,12 +7,6 @@ touch = function
   // Exec                                          //
   // ////////////////////////////////////////////////
   cli.exec = function(params)
-    // functions ////////////////////////////////////
-    getFileName = function(file)
-      return file.name
-    end function
-
-    // main ////////////////////////////////////
     self.parseParams(params)
     log = @self.logger.log
 

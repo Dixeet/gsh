@@ -20,7 +20,7 @@ config = {
 // ////////////////////////////////////////////////
 gsh.prompt = function
   bang = "|> "
-  pp = active_user + "@" + gsh.ctx.local.computer.get_name + ":" + gsh.ctx.currentPath + bang
+  pp = (active_user + "@" + gsh.ctx.local.computer.get_name + ":" + gsh.ctx.currentPath).color("primary") + bang
   return pp
 end function
 

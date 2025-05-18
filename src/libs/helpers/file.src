@@ -28,7 +28,7 @@ file = function
     if params.customName then fileString += params.customName else fileString += file.name.trim
 
     if file.__isa.hasIndex("is_symlink") and file.is_symlink then
-      if detail then fileString = fileString + "-->" + file.path(true)
+      if params.long then fileString = fileString + "-->" + file.path(true)
       if gsh.helpers.colors.hasIndex("symlink") then fileString = fileString.color("symlink")
     else if file.is_folder and gsh.helpers.colors.hasIndex("folder") then
       fileString = fileString.color("folder")
