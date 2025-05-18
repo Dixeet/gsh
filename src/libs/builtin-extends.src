@@ -58,6 +58,17 @@ builtinExtends = function
     return indexFound
   end function
 
+  filter = function(cb)
+    result = []
+    for i in self.indexes
+      res = cb(self[i])
+      if res then
+        result.push(self[i])
+      end if
+    end for
+    return result
+  end function
+
   // ! mutate the map ////////////////////////////////////
   merge = function(m)
     for k in m.indexes
@@ -79,6 +90,7 @@ builtinExtends = function
   map.merge = @merge
   list.findIndex = @findIndex
   map.findIndex = @findIndex
+  list.filter = @filter
 
   // ////////////////////////////////////////////////
   // number                                        //

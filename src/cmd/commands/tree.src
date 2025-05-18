@@ -36,8 +36,8 @@ tree = function
 
     log = @self.logger.log
 
-    dir = gsh.ctx.currentPath
-    if self.args then dir = self.args[0]
+    dir = gsh.normalize(gsh.ctx.currentPath)
+    if self.args then dir = gsh.normalize(self.args[0])
 
     lsParams = [ "--silent" ]
     if self.options.time then lsParams.push("-t")
@@ -53,37 +53,51 @@ tree = function
       "long": self.options.long,
     }
 
-    log(gsh.helpers.getFileString(res[0], { "customName": res[0].path }))
-    prefixLvlStart = { 1: "│ " }
-    for i in range(1, res.len - 1)
-      file = res[i]
-      if dir == "/" then pathToSplit = file.path else pathToSplit = file.path.replace(dir, "")
-      lvl = pathToSplit.split("/").len - 1
-
-      rev = res[ : ]
-      rev.reverse
-      sameParentPath = function(item)
-        return file.parent and item.parent and file.parent.path == item.parent.path
+    if self.options.pattern then
+      matchPattern = function(item)
+        relativePath = gsh.helpers.path.relative(item.path, dir)
+        return relativePath.matchGlob(self.options.pattern)
       end function
-      lastIndexOfLvl = res.len - 1 - rev.findIndex(@sameParentPath)
-      isLastOfLvl = i == lastIndexOfLvl
+      res = res.filter(@matchPattern)
+    end if
 
-      if not isLastOfLvl then prefixLvl = "├" else prefixLvl = "└"
-      prefix = ""
-      if lvl > 1 then
-        if isLastOfLvl then prefixLvlStart[lvl] = "  " else prefixLvlStart[lvl] = "│ "
-        for x in range(1, lvl - 1)
-          prefix += prefixLvlStart[x.to_int]
-        end for
-      end if
-      prefix += prefixLvl + "─ "
-      if self.options.fullpath then
-        if dir == "/" then params.customName = file.path else params.customName = file.path.replace(dir, ".")
-      end if
+    prefixLvlStart = { 1: "│ " }
+    rev = res[ : ]
+    rev.reverse
+    for i in res.indexes
+      if i == 0 and not self.options.pattern then
+        log(gsh.helpers.getFileString(res[0], { "customName": res[0].path }))
+      else
+        file = res[i]
+        pathToSplit = gsh.helpers.path.relative(file.path, dir)
 
-      filename = gsh.helpers.getFileString(file, params)
-      name = prefix + filename
-      log(name)
+        if not self.options.pattern then
+          lvl = pathToSplit.split("/").len - 1
+          sameParentPath = function(item)
+            return file.parent and item.parent and file.parent.path == item.parent.path
+          end function
+          lastIndexOfLvl = res.len - 1 - rev.findIndex(@sameParentPath)
+          isLastOfLvl = i == lastIndexOfLvl
+
+          if not isLastOfLvl then prefixLvl = "├" else prefixLvl = "└"
+          prefix = ""
+          if lvl > 1 then
+            if isLastOfLvl then prefixLvlStart[lvl] = "  " else prefixLvlStart[lvl] = "│ "
+            for x in range(1, lvl - 1)
+              prefix += prefixLvlStart[x.to_int]
+            end for
+          end if
+          prefix += prefixLvl + "─ "
+          if self.options.fullpath then
+            params.customName = pathToSplit
+          end if
+          filename = gsh.helpers.getFileString(file, params)
+          name = prefix + filename
+        else
+          name = gsh.helpers.getFileString(file, { "customName": pathToSplit })
+        end if
+        log(name)
+      end if
     end for
 
     return res
@@ -97,7 +111,9 @@ tree = function
     "tree [OPTION]... [<dir>]",
     "tree",
     "tree -f /home/guest/",
+    "tree -l /",
     "tree -f -p -u -g -s -t -r /",
+    "tree / -P *.txt",
   ]
   cli.definition.sections = [
     "",
@@ -145,6 +161,12 @@ tree = function
     "name": "--reverse",
     "alias": "-r",
     "description": "Reverse sorted tree",
+  }
+  opts.pattern = new cli.CliOption + {
+    "name": "--pattern",
+    "alias": "-P",
+    "arg": "glob_pattern",
+    "description": "Filter by glob pattern",
   }
   opts.help = new cli.CliOption + {
     "name": "--help",
