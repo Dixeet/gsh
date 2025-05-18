@@ -23,5 +23,26 @@ glob = function
     return s.is_match(regex)
   end function
 
+  glob.parse = function(pattern)
+    patternPath = gsh.helpers.path.normalize(pattern)
+    res = {
+      "dir": null,
+      "pattern": null,
+      "path": null,
+    }
+    if patternPath.indexOf("**") != null then
+      index = patternPath.indexOf("**")
+      if index - 1 then res.dir = gsh.helpers.path.sanitize(patternPath[ : index - 1]) else res.dir = gsh.helpers.path.sanitize(patternPath[0])
+      res.pattern = patternPath[index : ]
+    else if patternPath.indexOf("*") != null then
+      spl = patternPath.split("/")
+      res.dir = gsh.helpers.path.sanitize(spl[ : -1].join("/"))
+      res.pattern = spl[-1]
+    else
+      res.path = patternPath
+    end if
+    return res
+  end function
+
   return glob
 end function

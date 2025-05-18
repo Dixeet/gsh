@@ -1,47 +1,61 @@
 #include "../src/imports.src";
 
-test = [
-  "tazerutato.js",
-  "tarutitu.js",
-  "tatitu.js",
-  "/bin",
-  "/bin/tato.js",
-  "/bin/baz.txt",
-  "tarutitu.js",
-  "foobarbaz.js",
-]
+//test = [
+//  "tazerutato.js",
+//  "tarutitu.js",
+//  "tatitu.js",
+//  "/bin",
+//  "/bin/tato.js",
+//  "/bin/baz.txt",
+//  "tarutitu.js",
+//  "foobarbaz.js",
+//]
+//
+//ps = [
+//  "*.js",
+//  "ta*ru*.js",
+//  "/**/*.js",
+//  "**/ta*ru*.js",
+//  "foobarbaz.js",
+//  "/bin",
+//  "/**/bin*",
+//  "*",
+//  "**/*",
+//]
+//
+//for pattern in ps
+//  print
+//  print(pattern + "\n----------")
+//  for s in test
+//    res = s.matchGlob(pattern)
+//    resString = s + " "
+//    if res then resString += print(s)
+//  end for
+//end for
 
+//a = gsh.helpers.glob.parse("**/*.txt")
+//print(a)
+//
+//a = gsh.helpers.glob.parse("/home/guest/foo.pdf")
+//print(a)
+//
+//a = gsh.helpers.glob.parse("/home/lilo/*.exe")
+//print(a)
+//
+//a = gsh.helpers.glob.parse("/**/*.so")
+//print(a)
+//
+//a = gsh.helpers.glob.parse("../*.pdf")
+//print(a)
+//
+//a = gsh.helpers.glob.parse("tata.txt")
+//print(a)
+//
+//a = gsh.helpers.glob.parse("*.js")
+//print(a)
 
+ print("└".code)
+ print("├".code)
+ print("─".code)
+ print("│".code)
 
-ps = [
-  "*.js",
-  "ta*ru*.js",
-  "/**/*.js",
-  "**/ta*ru*.js",
-  "foobarbaz.js",
-  "/bin",
-  "/**/bin*",
-]
-
-for pattern in ps
-  print
-  print(pattern + "\n----------")
-  for s in test
-    res = s.matchGlob(pattern)
-    resString = s + " "
-    if res then resString += print(s)
-  end for
-end for
-
-// /home/test
-// /home/test/.Trash
-// /home/test/Config
-// /home/test/Config/Bank.txt
-// /home/test/Config/Mail.txt
-// /home/test/Desktop
-// /home/test/Downloads
-// /home/test/myprogram
-// print("└".code)
-// print("├".code)
-// print("─".code)
-// print("│".code)
