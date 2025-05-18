@@ -1,0 +1,107 @@
+rm = function
+  cli = new gsh.Cli
+  cli.init(
+    "rm",
+    "rm",
+    true,
+    true,
+    true)
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+
+    log = @self.logger.log
+
+    if not self.args then
+      error = "rm: expects a file, a folder or a pattern"
+      self.logger.error(error)
+      return error
+    end if
+
+    parse = gsh.helpers.glob.parse(self.args[0])
+
+    treeParams = [ "--silent" ]
+    if parse.path then treeParams.push(parse.path)
+    if parse.pattern then treeParams += [
+      "-P",
+      parse.pattern,
+    ]
+    if parse.dir then treeParams.push(parse.dir)
+
+    files = gsh.commands.tree.exec(treeParams)
+
+    ask = null
+    if gsh.settings.behavior.onRm.confirm and not self.options.force then
+      ask = gsh.helpers.ask(files.len + " file(s) will be deleted, confirm?", [
+        "y",
+        "n",
+      ], gsh.settings.behavior.onRm.defaultAnswer)
+    end if
+    if ask == "n" then
+      return null
+    end if
+
+    for f in files
+      file = gsh.getFile(f.path)
+      if file then
+        if file.is_folder and not self.options.recursive then
+          self.logger.warn("rm: "+ file.name + " is a folder, use -r to delete")
+        else
+          name = file.name
+          res = file.delete
+          if res isa string and res then self.logger.error(res) else self.logger.success(name + " deleted")
+        end if
+      end if
+    end for
+
+    return 
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.force = new cli.CliOption + {
+    "name": "--force",
+    "alias": "-f",
+    "description": "Dont ask for confirmation",
+  }
+  opts.recursive = new cli.CliOption + {
+    "name": "--recursive",
+    "alias": "-r",
+    "description": "Recursive, delete folder",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "rm [OPTION]... (<file>|<folder>|<glob_pattern>)",
+    "rm foo.txt",
+    "rm -r /home/guest/Downloads",
+    "rm -r /home/foobar/.Trash/*",
+  ]
+  cli.definition.sections = [
+    "",
+    "Delete a file or folder",
+    "If a pattern is given, remove everything matching that pattern",
+  ]
+
+  return cli
+end function
