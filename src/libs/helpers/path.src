@@ -70,7 +70,7 @@ path = function
   _path.relative = function(from, to)
     from = _path.sanitize(from)
     to = _path.sanitize(to)
-    if to == "/" then return _path.join([
+    if from == "/" then return _path.join([
       to,
       from,
     ])
@@ -80,11 +80,12 @@ path = function
     end for
     partialFrom = from.replace(common, "")
     partialTo = to.replace(common, "")
-    if not partialTo then return "." + partialFrom
+    if not partialFrom then return "." + partialTo
     res = ""
-    for parent in partialTo.split("/")
-      res = "../" + res + parent + "/"
+    for parent in partialFrom.split("/")
+      res += "../"
     end for
+    res += partialTo
     return _path.sanitize(res)
   end function
 
