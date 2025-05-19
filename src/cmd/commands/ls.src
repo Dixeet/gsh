@@ -1,6 +1,11 @@
 ls = function
   cli = new gsh.Cli
-  cli.init("ls", "ls", true, true, true)
+  cli.init(
+    "ls",
+    "ls",
+    true,
+    true,
+    true)
 
 
   // ////////////////////////////////////////////////
@@ -21,7 +26,7 @@ ls = function
     folder = gsh.getFile(folder)
 
     if not folder then
-      error = "ls: No such file or directory"
+      error = "No such file or directory"
       self.logger.error(error)
       return error
     end if
@@ -30,6 +35,14 @@ ls = function
     if folder.is_folder then files = folder.get_folders + folder.get_files else files.push(folder)
     if not self.options.time then files = files.sortBy(@getFileName)
     if self.options.reverse then files.reverse
+
+    if self.options.pattern then
+      this = self
+      matchPattern = function(item)
+        return item.name.matchGlob(this.options.pattern)
+      end function
+      files = files.filter(@matchPattern)
+    end if
 
     res = []
     for file in files
@@ -77,6 +90,12 @@ ls = function
     "name": "--silent",
     "description": "Silent output",
   }
+  opts.pattern = new cli.CliOption + {
+    "name": "--pattern",
+    "alias": "-P",
+    "arg": "glob_pattern",
+    "description": "Filter by glob pattern",
+  }
   cli.definition.options = opts
   cli.definition.usages = [
     "ls [OPTION]... [<path>]",
@@ -84,6 +103,7 @@ ls = function
     "ls /home/guest",
     "ls -l -t /bin",
     "ls -l -r /lib",
+    "ls ../guest -P *.src",
   ]
   cli.definition.sections = [
     "",

@@ -1,6 +1,11 @@
 mv = function
   cli = new gsh.Cli
-  cli.init("mv", "mv", true, true, true)
+  cli.init(
+    "mv",
+    "mv",
+    true,
+    true,
+    true)
 
 
   // ////////////////////////////////////////////////
@@ -34,6 +39,16 @@ mv = function
       else
         path = destination.parent.path
         name = destination.name
+        ask = null
+        if gsh.settings.behavior.onMvAlreadyExists.confirm then
+          ask = gsh.helpers.ask(name + " already exists, overwrite?", [
+            "y",
+            "n",
+          ], gsh.settings.behavior.onMvAlreadyExists.defaultAnswer)
+        end if
+        if ask == "n" then
+          return null
+        end if
       end if
     else
       parse = gsh.helpers.path.parse(self.args[1])
@@ -41,9 +56,18 @@ mv = function
       name = parse.name
     end if
 
+    filepath = file.path
     res = file.move(path, name)
 
-    if res isa string then self.logger.error(res) else self.logger.success("mv: " + file.path + " -> " + gsh.normalize(self.args[1]))
+    if res isa string then
+      self.logger.error(res)
+    else
+      res = gsh.getFile(gsh.helpers.path.resolve([
+        path,
+        name,
+      ]))
+      self.logger.success("mv: " + filepath + " -> " + res.path)
+    end if
 
     return res
 

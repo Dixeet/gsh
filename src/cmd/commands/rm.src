@@ -27,15 +27,24 @@ rm = function
 
     parse = gsh.helpers.glob.parse(self.args[0])
 
-    treeParams = [ "--silent" ]
-    if parse.path then treeParams.push(parse.path)
-    if parse.pattern then treeParams += [
+    cmdParams = [ "--silent" ]
+    if parse.path then cmdParams.push(parse.path)
+    if parse.pattern then cmdParams += [
       "-P",
       parse.pattern,
     ]
-    if parse.dir then treeParams.push(parse.dir)
+    cmd = "tree"
+    if parse.dir then
+      cmdParams.push(parse.dir)
+      if not parse.deep then cmd = "ls"
+    end if
 
-    files = gsh.commands.tree.exec(treeParams)
+    files = gsh.commands[cmd].exec(cmdParams)
+
+    if files isa string and files then
+      self.logger.error(files)
+      return 
+    end if
 
     ask = null
     if gsh.settings.behavior.onRm.confirm and not self.options.force then
@@ -52,9 +61,9 @@ rm = function
       file = gsh.getFile(f.path)
       if file then
         if file.is_folder and not self.options.recursive then
-          self.logger.warn("rm: "+ file.name + " is a folder, use -r to delete")
+          self.logger.warn("rm: " + file.name + " is a folder, use -r to delete")
         else
-          name = file.name
+          name = file.path
           res = file.delete
           if res isa string and res then self.logger.error(res) else self.logger.success(name + " deleted")
         end if

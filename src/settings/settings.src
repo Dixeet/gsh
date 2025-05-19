@@ -19,6 +19,10 @@ settings = function
         "confirm": true,
         "defaultAnswer": "n",
       },
+      "onMvAlreadyExists": {
+        "confirm": true,
+        "defaultAnswer": "n",
+      },
     },
     "PATH": "/root/dev/bin:/root/bin:/bin",
     "colors": {

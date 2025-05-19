@@ -39,6 +39,12 @@ tree = function
     dir = gsh.normalize(gsh.ctx.currentPath)
     if self.args then dir = gsh.normalize(self.args[0])
 
+    if not gsh.getFile(dir) then
+      error = "No such file or directory"
+      self.logger.error(error)
+      return error
+    end if
+
     lsParams = [ "--silent" ]
     if self.options.time then lsParams.push("-t")
     if self.options.reverse then lsParams.push("-r")
@@ -55,7 +61,7 @@ tree = function
 
     if self.options.pattern then
       matchPattern = function(item)
-        relativePath = gsh.helpers.path.relative(item.path, dir)
+        relativePath = gsh.helpers.path.relative(dir, item.path)
         return relativePath.matchGlob(this.options.pattern)
       end function
       if res then res = res[1 : ]
@@ -70,7 +76,7 @@ tree = function
         log(gsh.helpers.getFileString(res[0], { "customName": res[0].path }))
       else
         file = res[i]
-        pathToSplit = gsh.helpers.path.relative(file.path, dir)
+        pathToSplit = gsh.helpers.path.relative(dir, file.path)
 
         if not self.options.pattern then
           lvl = pathToSplit.split("/").len - 1

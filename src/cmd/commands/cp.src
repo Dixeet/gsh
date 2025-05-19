@@ -1,6 +1,11 @@
 cp = function
   cli = new gsh.Cli
-  cli.init("cp", "cp", true, true, true)
+  cli.init(
+    "cp",
+    "cp",
+    true,
+    true,
+    true)
 
 
   // ////////////////////////////////////////////////
@@ -53,7 +58,15 @@ cp = function
 
     res = file.copy(path, name)
 
-    if res isa string then self.logger.error(res) else res = gsh.getFile(gsh.helpers.path.resolve([path, name]))
+    if res isa string then
+      self.logger.error(res)
+    else
+      res = gsh.getFile(gsh.helpers.path.resolve([
+        path,
+        name,
+      ]))
+      self.logger.success("cp: " + file.path + " copied to " + res.path)
+    end if
 
     return res
 
