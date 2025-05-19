@@ -27,10 +27,29 @@ exec = function
       if not launched then gsh.ctx.local.shell.launch(cmd, args.join(" "))
     end function
 
+    findString = function(input)
+      res = input
+      if input isa list and input then
+        ijoin = input.join(" ").replace("\\'", "°")
+        matches = ijoin.matches("'[^']*'")
+        if matches then
+          for m in matches.values
+            ijoin = ijoin.replace(m, m.replace(" ", "¨").replace("'", "").replace("°", "'"))
+          end for
+          res = ijoin.split(" ")
+          for r in res.indexes
+            res[r] = res[r].replace("¨", " ")
+          end for
+        end if
+      end if
+      return res
+    end function
+
 
     // ////////////////////////////////////////////////
     // main                                          //
     // ////////////////////////////////////////////////
+    input = findString(input)
     if not input isa list or not input then
       gsh.core.promptMode.prompt
     else
