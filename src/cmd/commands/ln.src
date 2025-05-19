@@ -1,0 +1,92 @@
+ln = function
+  cli = new gsh.Cli
+  cli.init(
+    "ln",
+    "ln",
+    true,
+    true,
+    true)
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    self.parseParams(params)
+
+    log = @self.logger.log
+
+    if not self.args or not self.args.len > 1 then
+      error = "ln: expects 2 parameters"
+      self.logger.error(error)
+      return error
+    end if
+
+    file = gsh.getFile(gsh.normalize(self.args[0]))
+    if not file then
+      error = "ln: " + self.args[0] + " no such file or directory"
+      self.logger.error(error)
+      return error
+    end if
+
+    destination = gsh.getFile(gsh.normalize(self.args[1]))
+    path = null
+    name = null
+    if destination then
+      if destination.is_folder then
+        path = destination.path
+        name = file.name
+      else
+        path = destination.parent.path
+        name = destination.name
+      end if
+    else
+      parse = gsh.helpers.path.parse(self.args[1])
+      path = parse.dir
+      name = parse.name
+    end if
+
+    res = file.symlink(path, name)
+
+    if res isa string then
+      self.logger.error(res)
+    else
+      res = gsh.getFile(gsh.helpers.path.resolve([
+        path,
+        name,
+      ]))
+      self.logger.success("Symlink " + file.path + "-->" + res.path + " created")
+    end if
+
+    return res
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "ln (<file>|<folder>) (<destination_file> | <destination_folder>)",
+    "ln foo.txt bar.txt",
+    "ln /home/guest/welcome.pdf ../Downloads/",
+  ]
+  cli.definition.sections = [
+    "",
+    "Create a symlink of the given file / folder",
+  ]
+
+  return cli
+end function
