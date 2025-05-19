@@ -8,11 +8,11 @@ glob = function
     return pattern
   end function
 
-  glob.isMatch = function(s, pattern)
+  glob.isMatch = function(s, pattern, simple = false)
     if s and s.len > 1 and s[0] == "." and s[1] == "/" then s = s[2 : ]
     regex = "^[^\/]*"
     splPattern = pattern.split("\*\*\/")
-    if splPattern and splPattern.len > 1 then
+    if (splPattern and splPattern.len > 1) or simple then
       regex = "^.*"
       pattern = splPattern[-1]
     end if
@@ -29,15 +29,18 @@ glob = function
       "dir": null,
       "pattern": null,
       "path": null,
+      "deep": null,
     }
     if patternPath.indexOf("**") != null then
       index = patternPath.indexOf("**")
       if index - 1 then res.dir = gsh.helpers.path.sanitize(patternPath[ : index - 1]) else res.dir = gsh.helpers.path.sanitize(patternPath[0])
       res.pattern = patternPath[index : ]
+      res.deep = true
     else if patternPath.indexOf("*") != null then
       spl = patternPath.split("/")
       res.dir = gsh.helpers.path.sanitize(spl[ : -1].join("/"))
       res.pattern = spl[-1]
+      res.deep = false
     else
       res.path = patternPath
     end if
