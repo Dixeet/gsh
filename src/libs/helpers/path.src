@@ -75,8 +75,8 @@ path = function
     from = _path.sanitize(from)
     to = _path.sanitize(to)
     if from == "/" then return _path.join([
-      to,
       from,
+      to,
     ])
     common = ""
     for i in to.indexes

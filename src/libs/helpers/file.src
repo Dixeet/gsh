@@ -1,7 +1,7 @@
 file = function
   file = {}
 
-  file.getFileString = function(file, params, fileNameCb)
+  file.getFileString = function(file, params)
     params = {
       "permissions": false,
       "owner": false,
