@@ -47,6 +47,7 @@ mv = function
           ], gsh.settings.behavior.onMvAlreadyExists.defaultAnswer)
         end if
         if ask == "n" then
+          self.warn.success("mv aborted")
           return null
         end if
       end if

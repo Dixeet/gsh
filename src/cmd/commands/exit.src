@@ -1,6 +1,11 @@
 exitCmd = function
   cli = new gsh.Cli
-  cli.init("Exit", "exit", true, false, false)
+  cli.init(
+    "Exit",
+    "exit",
+    true,
+    false,
+    false)
 
   cli.exec = function(params)
     self.parseParams(params)
@@ -18,6 +23,8 @@ exitCmd = function
 
     if res == "y" then
       if self.options.hard then exit else gsh.core.promptMode.exit
+    else
+      self.warn.success("exit aborted")
     end if
 
   end function

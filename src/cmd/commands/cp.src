@@ -47,6 +47,7 @@ cp = function
           ], gsh.settings.behavior.onCpAlreadyExists.defaultAnswer)
         end if
         if ask == "n" then
+          self.warn.success("cp aborted")
           return null
         end if
       end if

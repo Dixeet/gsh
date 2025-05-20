@@ -54,6 +54,7 @@ rm = function
       ], gsh.settings.behavior.onRm.defaultAnswer)
     end if
     if ask == "n" then
+      self.warn.success("rm aborted")
       return null
     end if
 
