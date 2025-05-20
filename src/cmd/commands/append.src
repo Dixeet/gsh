@@ -1,0 +1,98 @@
+append = function
+  cli = new gsh.Cli
+  cli.init(
+    "append",
+    "append",
+    true,
+    true,
+    true)
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    self.parseParams(params)
+
+    if not self.args or not self.args.len > 1 then
+      error = "append: expects atleast 2 parameters"
+      self.logger.error(error)
+      return error
+    end if
+
+    if self.args[0] isa string then
+      file = gsh.getFile(gsh.normalize(self.args[0]))
+      if not file then
+        error = "append: " + self.args[0] + " no such file or directory"
+        self.logger.error(error)
+        return error
+      end if
+    else if typeof(@self.args[0]) == "file" then
+      file = self.args[0]
+      if not file.has_permission("r") or not file.has_permission("w") then
+        error = "append: " + file.path + "no read/write access"
+        self.logger.error(error)
+        return error
+      end if
+    else
+      error = "append: first parameter must be a path or a File object"
+      self.logger.error(error)
+      return error
+    end if
+
+    if self.args[1] isa string then
+      content = self.args[1 : ].join(" ")
+    else if typeof(@self.args[1]) == "file" then
+      contentFile = self.args[1]
+      if not contentFile.has_permission("r") then
+        error = "append: " + contentFile.path + "no read access"
+        self.logger.error(error)
+        return error
+      end if
+      content = contentFile.get_content
+    end if
+
+    previousContent = file.get_content
+
+    write = file.set_content(previousContent + content)
+
+    if write isa string then
+      self.logger.error(write)
+      return write
+    else
+      self.logger.success(file.path + " content has been updated")
+    end if
+
+    return file
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "append (<path> | <File>) (<content>... | <File>)",
+    "append foo.txt foobar",
+    "append ../bar.txt 'this is a test'",
+    "append /home/guest/foobar.txt this is an other",
+    "append <File Object> <File Object>",
+  ]
+  cli.definition.sections = [
+    "",
+    "Append content to a file",
+  ]
+
+  return cli
+end function

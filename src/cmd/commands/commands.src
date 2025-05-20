@@ -9,6 +9,7 @@
 #include "tree.src";
 #include "rm.src";
 #include "ln.src";
+#include "append.src";
 
 commands = function
   commands = {}
@@ -23,5 +24,6 @@ commands = function
   commands.tree = tree
   commands.rm = rm
   commands.ln = ln
+  commands.append = append
   return commands
 end function
