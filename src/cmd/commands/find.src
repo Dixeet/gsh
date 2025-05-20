@@ -1,0 +1,126 @@
+find = function
+  cli = new gsh.Cli
+  cli.init(
+    "Find",
+    "find",
+    true,
+    true,
+    true)
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then return
+
+    log = @self.logger.log
+
+    if not self.args.len and not self.options.binaries then
+      error = "No -b or pattern given"
+      self.logger.error(error)
+      return error
+    end if
+
+    pattern = ""
+    if self.args.len == 0 then
+      dir = "/"
+      pattern = "*"
+    else if self.args.len == 1 then
+      dir = "/"
+      pattern = self.args[0]
+    else
+      dir = self.args[0]
+      pattern = self.args[1]
+    end if
+
+    if pattern.indexOf("**") == null then pattern = "**/" + pattern
+
+    treeParams = [
+      "--silent",
+      "-P",
+      pattern,
+    ]
+    if self.options.time then treeParams.push("-t")
+    if self.options.reverse then treeParams.push("-r")
+
+    files = gsh.commands.tree.exec([ dir ] + treeParams)
+
+    if files isa string then
+      self.logger.error(files)
+      return files
+    end if
+
+    if files then
+      if self.options.binaries then
+        matchBinaries = function(item)
+          return not item.is_folder and not item.is_symlink and item.is_binary
+        end function
+        files = files.filter(@matchBinaries)
+      end if
+
+      for file in files
+        name = gsh.helpers.getFileString(file, {
+          "customName": file.path,
+          "long": self.options.long,
+        })
+        log(name)
+      end for
+    end if
+
+    return files
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  opts.long = new cli.CliOption + {
+    "name": "--long",
+    "alias": "-l",
+    "description": "Detail format",
+  }
+  opts.time = new cli.CliOption + {
+    "name": "--time",
+    "alias": "-t",
+    "description": "Sort by time",
+  }
+  opts.reverse = new cli.CliOption + {
+    "name": "--reverse",
+    "alias": "-r",
+    "description": "Reverse sorted tree",
+  }
+  opts.binaries = new cli.CliOption + {
+    "name": "--binaries",
+    "alias": "-b",
+    "description": "Search only for binaries",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "find [OPTION]... (<path> | <glob_pattern>) [<glob_pattern>]",
+    "find *.so",
+    "find /home/guest foo.txt",
+  ]
+  cli.definition.sections = [
+    "",
+    "Find files ",
+  ]
+
+  return cli
+end function
