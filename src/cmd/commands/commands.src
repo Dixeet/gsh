@@ -12,6 +12,7 @@
 #include "append.src";
 #include "find.src";
 #include "cat.src";
+#include "chmod.src";
 
 commands = function
   commands = {}
@@ -29,5 +30,6 @@ commands = function
   commands.append = append
   commands.find = find
   commands.cat = cat
+  commands.chmod = chmod
   return commands
 end function
