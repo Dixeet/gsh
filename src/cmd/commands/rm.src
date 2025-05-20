@@ -16,6 +16,7 @@ rm = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
+    if self.options.help then return
 
     log = @self.logger.log
 

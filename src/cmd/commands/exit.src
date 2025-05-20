@@ -9,6 +9,7 @@ exitCmd = function
 
   cli.exec = function(params)
     self.parseParams(params)
+    if self.options.help then return
 
     res = null
 

@@ -4,6 +4,7 @@ clear = function
 
   cli.exec = function(params)
     self.parseParams(params)
+    if self.options.help then return
     clear_screen
   end function
 

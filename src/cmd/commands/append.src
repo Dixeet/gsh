@@ -13,6 +13,7 @@ append = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
+    if self.options.help then return
 
     if not self.args or not self.args.len > 1 then
       error = "append: expects atleast 2 parameters"

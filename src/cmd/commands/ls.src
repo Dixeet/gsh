@@ -19,6 +19,7 @@ ls = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
+    if self.options.help then return
     log = @self.logger.log
 
     folder = gsh.ctx.currentPath

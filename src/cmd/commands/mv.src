@@ -13,6 +13,7 @@ mv = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
+    if self.options.help then return
 
     log = @self.logger.log
 

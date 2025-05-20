@@ -8,6 +8,7 @@ cd = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
+    if self.options.help then return
 
     if not gsh.t("ctx") or not gsh.ctx.t("currentPath") then gsh.ctx.currentPath = home_dir
     cd = gsh.getFile(gsh.ctx.currentPath)

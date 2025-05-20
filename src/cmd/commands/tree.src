@@ -32,6 +32,7 @@ tree = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
+    if self.options.help then return
     this = self
 
     log = @self.logger.log
