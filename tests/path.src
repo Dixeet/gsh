@@ -9,7 +9,7 @@ p6 = "/foo/bar//baz/asdf/quux/.."
 
 path = gsh.helpers.path
 
-print(path.normalize(p1))
+print(path.normalize("."))
 print(path.normalize(p2))
 print(path.normalize(p3))
 print(path.normalize(p4))
