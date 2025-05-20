@@ -11,6 +11,7 @@
 #include "ln.src";
 #include "append.src";
 #include "find.src";
+#include "cat.src";
 
 commands = function
   commands = {}
@@ -27,5 +28,6 @@ commands = function
   commands.ln = ln
   commands.append = append
   commands.find = find
+  commands.cat = cat
   return commands
 end function

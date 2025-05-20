@@ -1,0 +1,68 @@
+cat = function
+  cli = new gsh.Cli
+  cli.init(
+    "Cat",
+    "cat",
+    true,
+    false,
+    true)
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then return 
+
+    log = @self.logger.log
+
+    if not self.args then
+      error = "cat: expects a <path> parameter"
+      self.logger.error(error)
+      return error
+    end if
+
+    file = gsh.getFile(gsh.normalize(self.args[0]))
+
+    if not file then
+      error = "No such file or directory"
+      self.logger.error(error)
+      return error
+    end if
+
+    if not file.has_permission("r") then
+      error = "append: " + file.path + "no read access"
+      self.logger.error(error)
+      return error
+    end if
+
+    log(file.get_content)
+
+    return file
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [ "cat <path>" ]
+  cli.definition.sections = [
+    "",
+    "Print content of a file",
+  ]
+
+  return cli
+end function
