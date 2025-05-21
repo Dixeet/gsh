@@ -11,11 +11,7 @@ touch = function
     if self.options.help then return
     log = @self.logger.log
 
-    if not self.args or not self.args[0] then
-      error = "touch: expects atleast <path> argument"
-      self.logger.error(error)
-      return error
-    end if
+    if not self.args or not self.args[0] then return self.logger.error("touch: expects atleast <path> argument")
 
     path = gsh.normalize(self.args[0])
     parsedPath = gsh.helpers.path.parse(path)

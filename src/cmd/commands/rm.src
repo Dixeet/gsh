@@ -20,11 +20,7 @@ rm = function
 
     log = @self.logger.log
 
-    if not self.args then
-      error = "rm: expects a file, a folder or a pattern"
-      self.logger.error(error)
-      return error
-    end if
+    if not self.args then return self.logger.error("rm: expects a file, a folder or a pattern")
 
     parse = gsh.helpers.glob.parse(self.args[0])
 

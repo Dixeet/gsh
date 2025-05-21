@@ -6,6 +6,7 @@ globals.Logger = function(defaultToSilent = false)
     else
       if not silent then print(s)
     end if
+    return s
   end function
   logger.error = function(s, silent = null)
     if silent == null then
@@ -13,6 +14,7 @@ globals.Logger = function(defaultToSilent = false)
     else
       if not silent then print(s.color("error"))
     end if
+    return s
   end function
   logger.warn = function(s, silent = null)
     if silent == null then
@@ -20,13 +22,15 @@ globals.Logger = function(defaultToSilent = false)
     else
       if not silent then print(s.color("warn"))
     end if
+    return s
   end function
   logger.success = function(s, silent = null)
-      if silent == null then
-        if not defaultToSilent then print(s.color("success"))
-      else
-        if not silent then print(s.color("success"))
-      end if
-    end function
+    if silent == null then
+      if not defaultToSilent then print(s.color("success"))
+    else
+      if not silent then print(s.color("success"))
+    end if
+    return s
+  end function
   return logger
 end function

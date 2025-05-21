@@ -26,11 +26,7 @@ ls = function
     if self.args then folder = self.args[0]
     folder = gsh.getFile(folder)
 
-    if not folder then
-      error = "No such file or directory"
-      self.logger.error(error)
-      return error
-    end if
+    if not folder then return self.logger.error("No such file or directory")
 
     files = []
     if folder.is_folder then files = folder.get_folders + folder.get_files else files.push(folder)

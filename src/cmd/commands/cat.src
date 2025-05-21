@@ -20,25 +20,13 @@ cat = function
 
     log = @self.logger.log
 
-    if not self.args then
-      error = "cat: expects a <path> parameter"
-      self.logger.error(error)
-      return error
-    end if
+    if not self.args then return self.logger.error("cat: expects a <path> parameter")
 
     file = gsh.getFile(gsh.normalize(self.args[0]))
 
-    if not file then
-      error = "No such file or directory"
-      self.logger.error(error)
-      return error
-    end if
+    if not file then return self.logger.error("No such file or directory")
 
-    if not file.has_permission("r") then
-      error = "append: " + file.path + "no read access"
-      self.logger.error(error)
-      return error
-    end if
+    if not file.has_permission("r") then return self.logger.error("append: " + file.path + "no read access")
 
     log(file.get_content)
 

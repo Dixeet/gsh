@@ -13,43 +13,27 @@ append = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
 
-    if not self.args or not self.args.len > 1 then
-      error = "append: expects atleast 2 parameters"
-      self.logger.error(error)
-      return error
-    end if
+    if not self.args or not self.args.len > 1 then return self.logger.error("append: expects atleast 2 parameters")
 
     if self.args[0] isa string then
       file = gsh.getFile(gsh.normalize(self.args[0]))
-      if not file then
-        error = "append: " + self.args[0] + " no such file or directory"
-        self.logger.error(error)
-        return error
-      end if
+      if not file then return self.logger.error("append: " + self.args[0] + " no such file or directory")
+
     else if typeof(@self.args[0]) == "file" then
       file = self.args[0]
-      if not file.has_permission("r") or not file.has_permission("w") then
-        error = "append: " + file.path + "no read/write access"
-        self.logger.error(error)
-        return error
-      end if
+      if not file.has_permission("r") or not file.has_permission("w") then return self.logger.error("append: " + file.path + "no read/write access")
+
     else
-      error = "append: first parameter must be a path or a File object"
-      self.logger.error(error)
-      return error
+      return self.logger.error("append: first parameter must be a path or a File object")
     end if
 
     if self.args[1] isa string then
       content = self.args[1 : ].join(" ")
     else if typeof(@self.args[1]) == "file" then
       contentFile = self.args[1]
-      if not contentFile.has_permission("r") then
-        error = "append: " + contentFile.path + "no read access"
-        self.logger.error(error)
-        return error
-      end if
+      if not contentFile.has_permission("r") then return self.logger.error("append: " + contentFile.path + "no read access")
       content = contentFile.get_content
     end if
 

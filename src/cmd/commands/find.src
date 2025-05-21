@@ -20,11 +20,7 @@ find = function
 
     log = @self.logger.log
 
-    if not self.args.len and not self.options.binaries then
-      error = "No -b or pattern given"
-      self.logger.error(error)
-      return error
-    end if
+    if not self.args.len and not self.options.binaries then return self.logger.error("No -b or pattern given")
 
     pattern = ""
     if self.args.len == 0 then

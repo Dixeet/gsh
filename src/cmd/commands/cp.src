@@ -17,18 +17,10 @@ cp = function
 
     log = @self.logger.log
 
-    if not self.args or not self.args.len > 1 then
-      error = "cp: expects 2 parameters"
-      self.logger.error(error)
-      return error
-    end if
+    if not self.args or not self.args.len > 1 then return self.logger.error("cp: expects 2 parameters")
 
     file = gsh.getFile(gsh.normalize(self.args[0]))
-    if not file then
-      error = "cp: " + self.args[0] + " no such file or directory"
-      self.logger.error(error)
-      return error
-    end if
+    if not file then return self.logger.error("cp: " + self.args[0] + " no such file or directory")
 
     destination = gsh.getFile(gsh.normalize(self.args[1]))
     path = null

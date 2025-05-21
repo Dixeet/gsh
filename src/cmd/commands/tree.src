@@ -40,11 +40,7 @@ tree = function
     dir = gsh.normalize(gsh.ctx.currentPath)
     if self.args then dir = gsh.normalize(self.args[0])
 
-    if not gsh.getFile(dir) then
-      error = "No such file or directory"
-      self.logger.error(error)
-      return error
-    end if
+    if not gsh.getFile(dir) then return self.logger.error("No such file or directory")
 
     lsParams = [ "--silent" ]
     if self.options.time then lsParams.push("-t")
