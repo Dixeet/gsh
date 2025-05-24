@@ -19,6 +19,7 @@ gen
 node_modules/
 .node-persist
 build/
+builds/
 5hell/
 .env
 scratches
