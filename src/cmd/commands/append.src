@@ -1,11 +1,6 @@
 append = function
   cli = new gsh.Cli
-  cli.init(
-    "append",
-    "append",
-    true,
-    true,
-    true)
+  cli.init("Append", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -74,8 +69,9 @@ append = function
     "append /home/guest/foobar.txt this is an other",
     "append <File Object> <File Object>",
   ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Append content to a file",
   ]
 

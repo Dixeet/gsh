@@ -1,11 +1,9 @@
 cat = function
   cli = new gsh.Cli
-  cli.init(
-    "Cat",
-    "cat",
-    true,
-    false,
-    true)
+  cli.init("Cat", {
+    "autoSilent": false,
+    "os": true,
+  })
 
 
   // ////////////////////////////////////////////////
@@ -47,8 +45,9 @@ cat = function
   }
   cli.definition.options = opts
   cli.definition.usages = [ "cat <path>" ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Print content of a file",
   ]
 

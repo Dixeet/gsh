@@ -1,11 +1,6 @@
 ls = function
   cli = new gsh.Cli
-  cli.init(
-    "ls",
-    "ls",
-    true,
-    true,
-    true)
+  cli.init("ln", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -19,7 +14,7 @@ ls = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
     log = @self.logger.log
 
     folder = gsh.ctx.currentPath
@@ -102,8 +97,9 @@ ls = function
     "ls -l -r /lib",
     "ls ../guest -P *.src",
   ]
+  cli.definition.returns = "result list of files or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "List all files in <path>",
     "[default <path> = current_path]",
     "[default sort by name]",

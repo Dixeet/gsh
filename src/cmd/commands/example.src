@@ -9,7 +9,7 @@
 
 example = function
   cli = new gsh.Cli
-  cli.init("Example Cli", "example")
+  cli.init("Example Cli")
 
   cli.exec = function(params)
     self.parseParams(params)
@@ -58,21 +58,22 @@ example = function
   }
   cli.definition.options = opts
 
+  cli.definition.returns = "result"
   cli.definition.sections = [
-    [ "\nDescription" ],
+    "Description".bold,
     [ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur lorem neque, interdum eu odio et, imperdiet ullamcorper enim. Ut ullamcorper volutpat ex sodales porttitor. Maecenas sed risus nibh. Maecenas a fringilla sapien. Vivamus et arcu lobortis".indent(2) ],
   ]
 
   f = cli.formatter
   cli.definition.usages = [
     [
-      cli.cmd,
+      "example",
       "ship",
       "new",
       f.arg("name", false, true),
     ],
     [
-      cli.cmd,
+      "example",
       f.arg("name"),
       "move",
       f.arg("x"),
@@ -84,14 +85,14 @@ example = function
         f.arg(opts.speed.arg)),
     ],
     [
-      cli.cmd,
+      "example",
       "ship",
       "shoot",
       f.arg("x"),
       f.arg("y"),
     ],
     [
-      cli.cmd,
+      "example",
       "mine",
       f.exclusive([
         "set",
@@ -105,7 +106,7 @@ example = function
       ], true),
     ],
     [
-      cli.cmd,
+      "example",
       "ship",
       f.opt(
         opts.sailors.name,

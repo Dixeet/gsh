@@ -11,17 +11,23 @@ Cli = function
   Cli.CliOption = CliOption
 
   // /////////////////////////////////////////////////////////////////////////////////////////////////
-  Cli.init = function(name = "", cmd = "", autoHelp = true, autoSilent = true, os = false)
+  Cli.init = function(name = "", options = {})
+    cfg = {
+      "autoHelp": true,
+      "autoSilent": true,
+      "os": false,
+    }
+    if options then cfg += options
     self.name = name
-    self.cmd = cmd
-    self.autoHelp = autoHelp
-    self.autoSilent = autoSilent
-    self.os = os
+    self.autoHelp = cfg.autoHelp
+    self.autoSilent = cfg.autoSilent
+    self.os = cfg.os
     self.logger = Logger
     self.definition = {}
     self.definition.options = {}
     self.definition.usages = []
     self.definition.sections = []
+    self.definition.returns = null
     self.exec = function(params)
       print("Empty Command")
     end function
@@ -75,8 +81,10 @@ Cli = function
         optionsStr = optionsStr + optStr + char(10)
       end for
       optionsStr = format_columns(optionsStr).replace("¨", " ")
-      helpStr += optionsStr.indent(2)
+      helpStr += optionsStr.indent(2) + char(10)
     end if
+
+    if self.definition.returns then helpStr += char(10) + "Return: ".bold + self.definition.returns + char(10)
 
     if self.definition.sections and self.definition.sections.len then
       for section in self.definition.sections
@@ -146,6 +154,7 @@ Cli = function
       if opt.value.defaultArgValue then this.options[opt.key] = opt.value.defaultArgValue
     end for
 
+    // main ////////////////////////////////////
     for param in params
       if param[0] == "-" then
         isHandle = handleOption(param)
@@ -157,7 +166,7 @@ Cli = function
     if this.autoSilent and this.options.hasIndex("silent") then this.logger = Logger(this.options.silent)
     if this.autoHelp and this.options.hasIndex("help") and this.options.help then
       this.logger.log(this.help)
-      return
+      return 
     end if
   end function
 

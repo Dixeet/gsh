@@ -1,11 +1,6 @@
 chmod = function
   cli = new gsh.Cli
-  cli.init(
-    "Chmod",
-    "chmod",
-    true,
-    true,
-    true)
+  cli.init("Chmod", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -92,8 +87,9 @@ chmod = function
     "chmod -R g-rwx ./forbidden",
     "chmod -R 700 /bin",
   ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Change permissions of a file or a folder",
     "Permissions can be write with 2 formats :",
     "  - (u|g|o)(+|-)(rwx) format",

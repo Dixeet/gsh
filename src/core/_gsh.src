@@ -24,7 +24,7 @@ _gsh = function
     params = trimParams(params)
     params = handleDebugParam(params)
     cli = new gsh.Cli
-    cli.init("GSH CLI", "gsh")
+    cli.init("GSH CLI")
     cli.parseParams(params)
 
     gsh.core.exec(params)

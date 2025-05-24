@@ -1,11 +1,6 @@
 rm = function
   cli = new gsh.Cli
-  cli.init(
-    "rm",
-    "rm",
-    true,
-    true,
-    true)
+  cli.init("Rm", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -16,7 +11,7 @@ rm = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
 
     log = @self.logger.log
 
@@ -104,8 +99,9 @@ rm = function
     "rm -r /home/guest/Downloads",
     "rm -r /home/foobar/.Trash/*",
   ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Delete a file or folder",
     "If a pattern is given, remove everything matching that pattern",
   ]

@@ -1,11 +1,6 @@
 find = function
   cli = new gsh.Cli
-  cli.init(
-    "Find",
-    "find",
-    true,
-    true,
-    true)
+  cli.init("Find", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -16,7 +11,7 @@ find = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
 
     log = @self.logger.log
 
@@ -113,8 +108,9 @@ find = function
     "find *.so",
     "find /home/guest foo.txt",
   ]
+  cli.definition.returns = "result list of files or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Find files ",
   ]
 

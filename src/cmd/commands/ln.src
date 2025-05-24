@@ -1,11 +1,6 @@
 ln = function
   cli = new gsh.Cli
-  cli.init(
-    "ln",
-    "ln",
-    true,
-    true,
-    true)
+  cli.init("Ln", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -13,7 +8,7 @@ ln = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
 
     log = @self.logger.log
 
@@ -76,8 +71,9 @@ ln = function
     "ln foo.txt bar.txt",
     "ln /home/guest/welcome.pdf ../Downloads/",
   ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Create a symlink of the given file / folder",
   ]
 

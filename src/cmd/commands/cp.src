@@ -1,11 +1,9 @@
 cp = function
   cli = new gsh.Cli
-  cli.init(
-    "cp",
-    "cp",
-    true,
-    true,
-    true)
+  cli.init("Cp", {
+    "autoSilent": false,
+    "os": true,
+  })
 
 
   // ////////////////////////////////////////////////
@@ -13,7 +11,7 @@ cp = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
 
     log = @self.logger.log
 
@@ -87,8 +85,9 @@ cp = function
     "cp foo.txt bar.txt",
     "cp /home/guest/welcome.pdf ../Downloads/",
   ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Copy a file or folder to a new path",
   ]
 

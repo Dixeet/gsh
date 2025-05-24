@@ -1,6 +1,9 @@
 cd = function
   cli = new gsh.Cli
-  cli.init("cd", "cd", true, false, true)
+  cli.init("Cd", {
+    "autoSilent": false,
+    "os": true,
+  })
 
 
   // ////////////////////////////////////////////////
@@ -8,7 +11,7 @@ cd = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
 
     if not gsh.t("ctx") or not gsh.ctx.t("currentPath") then gsh.ctx.currentPath = home_dir
     cd = gsh.getFile(gsh.ctx.currentPath)
@@ -44,8 +47,9 @@ cd = function
   }
   cli.definition.options = opts
   cli.definition.usages = [ "cd [<path>]" ]
+  cli.definition.returns = "false or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Change current working directory to <path>",
   ]
 

@@ -1,11 +1,6 @@
 tree = function
   cli = new gsh.Cli
-  cli.init(
-    "Tree",
-    "tree",
-    true,
-    true,
-    true)
+  cli.init("Tree", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -32,7 +27,7 @@ tree = function
 
     // main ////////////////////////////////////
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
     this = self
 
     log = @self.logger.log
@@ -119,8 +114,9 @@ tree = function
     "tree -f -p -u -g -s -t -r /",
     "tree / -P *.txt",
   ]
+  cli.definition.returns = "result list of files or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "List contents of <dir> in a tree-like format",
     "<dir> is current directory if omitted",
   ]

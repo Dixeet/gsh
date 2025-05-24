@@ -1,6 +1,6 @@
 touch = function
   cli = new gsh.Cli
-  cli.init("touch", "touch", true, true, true)
+  cli.init("Touch", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -8,7 +8,7 @@ touch = function
   // ////////////////////////////////////////////////
   cli.exec = function(params)
     self.parseParams(params)
-    if self.options.help then return
+    if self.options.help then return 
     log = @self.logger.log
 
     if not self.args or not self.args[0] then return self.logger.error("touch: expects atleast <path> argument")
@@ -40,8 +40,9 @@ touch = function
     "touch foo",
     "touch /home/guest/my_file.txt foo bar baz",
   ]
+  cli.definition.returns = "result file or error string"
   cli.definition.sections = [
-    "",
+    "Description".bold,
     "Create a file at <path>",
     "Set contents from the rest of the arguments",
   ]
