@@ -1,6 +1,6 @@
-chmod = function
+chown = function
   cli = new gsh.Cli
-  cli.init("Chmod", { "os": true })
+  cli.init("Chown", { "os": true })
 
 
   // ////////////////////////////////////////////////
@@ -23,39 +23,21 @@ chmod = function
 
     if not file then return self.logger.error("no such file or directory")
 
-    perms = {
-      "0": "-rwx",
-      "1": "+x",
-      "2": "+w",
-      "3": "+wx",
-      "4": "+r",
-      "5": "+rx",
-      "6": "+rw",
-      "7": "+rwx",
-    }
-
-    permissions = self.args[0]
     if not self.options.recursive then self.options.recursive = false
 
-    if typeof(permissions[0].to_int) == "string" then
-      res = file.chmod(permissions, self.options.recursive)
-    else
-      if permissions.len != 3 then return self.logger.error("wrong permissions format")
-      permsList = []
-      for p in permissions
-        if not perms.hasIndex(p) then return self.logger.error("wrong permissions format")
-        permsList.push(perms[p])
-      end for
-      file.chmod("u-rwx", self.options.recursive)
-      file.chmod("g-rwx", self.options.recursive)
-      file.chmod("o-rwx", self.options.recursive)
-      file.chmod("u" + permsList[0], self.options.recursive)
-      file.chmod("g" + permsList[1], self.options.recursive)
-      res = file.chmod("o" + permsList[2], self.options.recursive)
+    userGroup = self.args[0].split(":")
+    user = userGroup[0]
+    if userGroup.len > 1 then group = userGroup[1] else group = null
+
+    res = file.set_owner(user, self.options.recursive)
+    if res != "" then return self.logger.error(res)
+
+    if group then
+      res = file.set_group(user, self.options.recursive)
+      if res != "" then return self.logger.error(res)
     end if
 
-    if res != "" then return self.logger.error(res)
-    self.logger.success(file.path + " rights changed to " + self.args[0])
+    self.logger.success(file.path + " ownership changed to " + self.args[0])
 
     return file
 
@@ -83,18 +65,15 @@ chmod = function
   }
   cli.definition.options = opts
   cli.definition.usages = [
-    "chmod [OPTION]... <permissions> <file>",
-    "chmod u+rwx /home/guest/foo.exe",
-    "chmod -R g-rwx ./forbidden",
-    "chmod -R 700 /bin",
+    "chown [OPTION]... (<owner> | <owner:group>) <file>",
+    "chown foo /home/guest/foo.exe",
+    "chown -R foo:bar ./baz.txt",
   ]
   cli.definition.returns = "result file or error string"
   cli.definition.sections = [
     "Description".bold,
-    "Change permissions of a file or a folder",
-    "Permissions can be write with 2 formats :",
-    "  - (u|g|o)(+|-)(rwx) format",
-    "  - number format, e.g: 744 = rwx r-- r--",
+    "Change ownership of a file or a folder",
+    "Ownership can be <user> or <user:group>",
   ]
 
   return cli
