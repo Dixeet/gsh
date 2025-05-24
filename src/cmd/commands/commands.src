@@ -14,6 +14,7 @@
 #include "cat.src";
 #include "chmod.src";
 #include "chown.src";
+#include "mkdir.src";
 
 commands = function
   commands = {}
@@ -33,5 +34,6 @@ commands = function
   commands.cat = cat
   commands.chmod = chmod
   commands.chown = chown
+  commands.mkdir = mkdir
   return commands
 end function

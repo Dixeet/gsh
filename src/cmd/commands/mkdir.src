@@ -1,0 +1,61 @@
+mkdir = function
+  cli = new gsh.Cli
+  cli.init("Mkdir", { "os": true })
+
+
+  // ////////////////////////////////////////////////
+  // Exec                                          //
+  // ////////////////////////////////////////////////
+  cli.exec = function(params)
+    // functions ////////////////////////////////////
+
+    // main ////////////////////////////////////
+    self.parseParams(params)
+    if self.options.help then return 
+
+    if not self.args then return self.logger.error("expects a parameter")
+
+    path = gsh.normalize(self.args[0])
+
+    parse = gsh.helpers.path.parse(path)
+    dir = parse.dir
+    name = parse.name
+    res = gsh.ctx.local.computer.create_folder(dir, name)
+
+    if res isa string then return self.logger.error(res)
+    self.logger.success(path + " created")
+
+    file = gsh.getFile(path)
+
+    return file
+
+  end function
+
+
+  // ////////////////////////////////////////////////
+  // Config                                          //
+  // ////////////////////////////////////////////////
+
+  opts = {}
+  opts.help = new cli.CliOption + {
+    "name": "--help",
+    "alias": "-h",
+    "description": "Show this screen",
+  }
+  opts.silent = new cli.CliOption + {
+    "name": "--silent",
+    "description": "Silent output",
+  }
+  cli.definition.options = opts
+  cli.definition.usages = [
+    "mkdir [OPTION]... <folder>",
+    "mkdir /home/guest/foo",
+  ]
+  cli.definition.returns = "result folder or error string"
+  cli.definition.sections = [
+    "Description".bold,
+    "Create a folder",
+  ]
+
+  return cli
+end function
